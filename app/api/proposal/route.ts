@@ -12,11 +12,22 @@ export async function POST(req: NextRequest) {
         }
     })
     if (exestinguser) {
-        return NextResponse.json({ messgae: "you are there" })
+        const proposaladded = await prisma.proposal.create({
+            data: {
+                category: body.category,
+                eventTitle: body.eventTitle
+            }
+        })
+        return NextResponse.json({
+            messgae: "proposal added",
+            proposaladded: JSON.stringify(proposaladded)
+        })
     }
     else {
-        return NextResponse.json({ messgae: "you are not there" })
+        return NextResponse.json({ messgae: "something went wrong" })
     }
+
+
 
 }
 
