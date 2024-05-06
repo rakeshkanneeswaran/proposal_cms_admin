@@ -64,16 +64,11 @@ export default function LoginForm() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-400">
                 Department of Computing Technologies
               </span>{' '}
-              In-House Proposal Management
+              <span > In-House Proposal Management</span>
+             
             </h1>
 
-            <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-              SRMEventConnect empowers SRM University clubs to showcase hackathons, workshops, tech talks, sports tournaments, and cultural festivals effortlessly.
-              <br /><br />
-              It centralizes events like tech challenges, guest lectures, and sports competitions for student discovery and engagement.
-              <br /><br />
-              We prioritize student involvement to enhance the SRM community experience, fostering vibrant campus activities and meaningful connections.
-            </p>
+           
           </div>
 
           <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">

@@ -28,8 +28,8 @@ model Proposal {
   mobileNumber           String?
   proposedPeriod         String?
   duration               String?
-  financialSupportOthers Float?
-  financialSupportSRMIST Float?
-  estimatedBudget        Float?
+  financialSupportOthers String?
+  financialSupportSRMIST String?
+  estimatedBudget        String?
    createdAt              DateTime @default(now()) 
 }
