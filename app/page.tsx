@@ -38,15 +38,15 @@ export default function LoginForm() {
       const res = await signIn("credentials", {
         username,
         password,
-        redirect: true,
+        redirect: false,
         callbackUrl: "/dashboard"
       });
 
       if (res?.status === 401) {
-        alert("Invalid username or password. Please try again.");
+        alert("Incorrect username or password. Please verify your credentials.");
       } else {
         console.log(res);
-        // router.push("/dashboard");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Login failed:", error);

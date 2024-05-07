@@ -26,7 +26,11 @@ export async function GET() {
             console.log(error)
         }
     }
+    else{
+        return NextResponse.json({ proposal: "something went wrong while fetching"})
+    }
     console.log(session?.user?.name)
+    return NextResponse.json({ proposal: "something went wrong while fetching"})
 }
 
 //for addding a proposal
