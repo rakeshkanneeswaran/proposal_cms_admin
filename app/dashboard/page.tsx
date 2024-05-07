@@ -1,8 +1,9 @@
 'use client'
-import EventForm from '@/components/EventForm'
+
 import EventTable from '@/components/Table'
 import { ModeToggle } from '@/components/ModeToggle'
-import axios from 'axios'
+import EventForm from '@/components/eventform'
+
 
 export default function Dashboard() {
   return (

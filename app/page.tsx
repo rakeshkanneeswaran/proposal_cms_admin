@@ -1,6 +1,5 @@
 "use client"
 import { signIn } from 'next-auth/react';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
@@ -9,10 +8,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export default function LoginForm() {
   const router = useRouter();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [cloudflareStatus, setCloudflareStatus] = useState(true);
   const session = useSession();
   // Redirect user based on session status
   useEffect(() => {
@@ -32,16 +29,13 @@ export default function LoginForm() {
   };
 
   const handleLogin = async () => {
-    if (!cloudflareStatus) {
-      alert("You are not a real user. Bot detected or DDOS attack detected.");
-      return;
-    }
 
     try {
       const res = await signIn("credentials", {
         username,
         password,
-        redirect: false, // We handle redirection manually
+        redirect: true, 
+        callbackUrl : "/dashboard"
       });
 
       if (res?.status === 401) {
@@ -104,23 +98,7 @@ export default function LoginForm() {
               Sign In
             </button>
 
-            <div className='pt-3'>
-              <Turnstile
-                siteKey='0x4AAAAAAAYBk_QWakffj74d'
-                onSuccess={async (token) => {
-                  try {
-                    const result = await axios.post("/api/ddoscloudflare", {
-                      cloudflaretoken: token
-                    });
-                    console.log("Cloudflare token function called");
-                    console.log(result);
-                    setCloudflareStatus(result.data.status);
-                  } catch (error) {
-                    console.error("Error fetching Cloudflare status:", error);
-                  }
-                }}
-              />
-            </div>
+            
 
             <p className="text-xs text-gray-500 mt-3">
               If unable to sign in or want to create an account, contact the maintainers.

@@ -31,7 +31,7 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-          {children}
+
         </Providers>
       </body>
     </html>
