@@ -1,68 +1,34 @@
-"use client"
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import EventForm from '@/components/eventform';
-import { Appbar } from '@/components/appbar';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Eventdetails } from '@/components/eventdetails';
+'use client'
+import EventForm from '@/components/EventForm'
+import EventTable from '@/components/Table'
+import { ModeToggle } from '@/components/ModeToggle'
+import axios from 'axios'
 
 export default function Dashboard() {
+  return (
+    <div>
+      <div className="absolute top-0 right-0 p-4 md:p-6 lg:p-8 ">
+        <ModeToggle />
+      </div>
+      <div className="flex justify-center w-full p-4 md:p-8">
+        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 dark:from-neutral-200 dark:to-neutral-600 md:mt-0">
+          Dashboard
+        </h1>
+      </div>
 
-    const router = useRouter();
-    const session = useSession();
-    const [proposal, setproposal] = useState([]);
+      <div className="flex m-5 p-5">
+        <div className="flex flex-col md:flex-row w-full h-screen">
+          {/* Left Section */}
+          <div className="flex-1 p-4 md:w-1/3 lg:w-1/4 flex flex-col justify-center">
+            <EventForm />
+          </div>
 
-    useEffect(() => {
-        // Fetch events data when component mounts
-
-        console.log(session.data?.user?.name)
-        axios.get('/api/proposal')
-        
-            .then(response => {
-                setproposal(response.data.proposal);
-                console.log(response.data.proposal)
-            })
-            .catch(error => {
-                console.error('Error fetching events:', error);
-            });
-
-        // Redirect based on session status
-        if (session.status === "unauthenticated") {
-            router.push("/");
-        } else {
-            router.push("/dashboard");
-        }
-    }, [session, router]);
-
-    return (
-        <div className='flex flex-col bg-white h-screen'>
-            <Appbar />
-            <h1 className='pt-20 text-black text-lg font-medium leading-tight pl-4'>Please complete the form below to add your event. Once submitted, event details cannot be modified. For any changes or inquiries, please contact our team.</h1>
-            <div className='flex md:flex-row flex-col h-4/5 gap-20 justify-between pt-20 pl-32'>
-                <div className='flex flex-col flex-grow p-3 overflow-scroll shadow-2xl rounded-xl'>
-                    <h1 className='text-black text-2xl font-medium leading-tight flex justify-start'>Fill the form </h1>
-                    <EventForm />
-                </div>
-                {/* <div className='flex flex-col flex-grow overflow-scroll '>
-                    <h1 className='text-black text-2xl font-medium leading-tight flex justify-start'>Recently added events</h1>
-                    {proposal.slice().reverse().map((event: {
-                        convenorName: string;
-                        eventTitle: string;
-                        type: string;
-                        imageBase64: string;
-                        eventName: string;
-                        date: string; id: string
-                    }) => (
-                        <div key={event.id} className='mb-4'>
-                            <Eventdetails eventTitle= {event.eventTitle} convenorName={event.convenorName}   />
-                        </div>
-                    ))}
-                </div> */}
-            </div>
+          {/* Right Section */}
+          <div className="flex-1 p-4 md:w-2/3 lg:w-3/4 flex flex-col justify-center">
+            <EventTable />
+          </div>
         </div>
-    );
-
-
-
+      </div>
+    </div>
+  )
 }

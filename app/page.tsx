@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export default function LoginForm() {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [cloudflareStatus, setCloudflareStatus] = useState(false);
+  const [cloudflareStatus, setCloudflareStatus] = useState(true);
   const session = useSession();
   // Redirect user based on session status
   useEffect(() => {
@@ -56,8 +57,8 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="bg-white h-screen">
-      <section className="text-gray-600 bg-white body-font">
+    <div className=" h-screen">
+      <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto flex flex-wrap items-center">
           <div className="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
             <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -65,10 +66,10 @@ export default function LoginForm() {
                 Department of Computing Technologies
               </span>{' '}
               <span > In-House Proposal Management</span>
-             
+
             </h1>
 
-           
+
           </div>
 
           <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
@@ -81,7 +82,7 @@ export default function LoginForm() {
                 id="username"
                 value={username}
                 onChange={handleUsernameChange}
-                className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full  rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>
 
@@ -97,7 +98,7 @@ export default function LoginForm() {
             </div>
 
             <button
-              className="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
+              className=" bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
               onClick={handleLogin}
             >
               Sign In

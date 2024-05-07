@@ -1,24 +1,62 @@
+// EventForm.tsx
+"use client"
+import * as React from "react";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import axios from "axios";
-import { useSession } from 'next-auth/react';
+import { DatePickerWithRange } from "./DateRange";
 
-const EventForm = () => {
-  const [eventTitle, setEventTitle] = useState('example');
-  const [category, setCategory] = useState('example');
-  const [convenorName, setConvenorName] = useState('example');
-  const [convenorDesignation, setConvenorDesignation] = useState('example');
-  const [mailId, setMailId] = useState('example');
-  const [mobileNumber, setMobileNumber] = useState('example');
-  const [proposedPeriod, setProposedPeriod] = useState('example');
-  const [duration, setDuration] = useState('example');
-  const [financialSupportOthers, setFinancialSupportOthers] = useState("");
-  const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('example');
-  const [estimatedBudget, setEstimatedBudget] = useState('example');
-
+export default function EventForm() {
   const { data: session, status } = useSession();
   const username = session?.user?.name;
+  const router = useRouter();
 
-  const handleSubmit = async (e:any) => {
+  // State management as in the initial form
+  const [eventTitle, setEventTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [fromData,setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [convenorName, setConvenorName] = useState('');
+  const [convenorDesignation, setConvenorDesignation] = useState('');
+  const [mailId, setMailId] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [proposedPeriod, setProposedPeriod] = useState('');
+  const [duration, setDuration] = useState('');
+  const [financialSupportOthers, setFinancialSupportOthers] = useState("");
+  const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
+  const [estimatedBudget, setEstimatedBudget] = useState('');
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (status === "unauthenticated") {
@@ -34,7 +72,7 @@ const EventForm = () => {
         convenorDesignation,
         mailId,
         mobileNumber,
-        proposedPeriod,
+        proposedPeriod : `${fromData} - ${toDate}`,
         duration,
         financialSupportOthers,
         financialSupportSRMIST,
@@ -47,6 +85,7 @@ const EventForm = () => {
 
       // Reset form fields after successful submission
       setEventTitle('');
+      setCategory('');
       setConvenorName('');
       setConvenorDesignation('');
       setMailId('');
@@ -56,7 +95,6 @@ const EventForm = () => {
       setFinancialSupportOthers('');
       setFinancialSupportSRMIST('');
       setEstimatedBudget('');
-
     } catch (error) {
       console.error("Error creating event:", error);
       alert("Failed to create event. Please try again later.");
@@ -64,161 +102,177 @@ const EventForm = () => {
   };
 
   return (
-    <form className="h-screen bg-white" onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="event_title" className="block mb-2 text-sm font-medium text-gray-900">
-          Event Title
-        </label>
-        <input
-          type="text"
-          id="event_title"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Event Title"
-          value={eventTitle}
-          onChange={(e) => setEventTitle(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_title" className="block mb-2 text-sm font-medium text-gray-900">
-          Category
-        </label>
-        <input
-          type="text"
-          id="event_category"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Event Title"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="convenor_name" className="block mb-2 text-sm font-medium text-gray-900">
-          Convenor Name
-        </label>
-        <input
-          type="text"
-          id="convenor_name"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Convenor Name"
-          value={convenorName}
-          onChange={(e) => setConvenorName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="convenor_designation" className="block mb-2 text-sm font-medium text-gray-900">
-          Convenor Designation
-        </label>
-        <input
-          type="text"
-          id="convenor_designation"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Convenor Designation"
-          value={convenorDesignation}
-          onChange={(e) => setConvenorDesignation(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="mail_id" className="block mb-2 text-sm font-medium text-gray-900">
-          Email
-        </label>
-        <input
-          type="email"
-          id="mail_id"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Email"
-          value={mailId}
-          onChange={(e) => setMailId(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="mobile_number" className="block mb-2 text-sm font-medium text-gray-900">
-          Mobile Number
-        </label>
-        <input
-          type="tel"
-          id="mobile_number"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Mobile Number"
-          value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="proposed_period" className="block mb-2 text-sm font-medium text-gray-900">
-          Proposed Period
-        </label>
-        <input
-          type="text"
-          id="proposed_period"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Proposed Period"
-          value={proposedPeriod}
-          onChange={(e) => setProposedPeriod(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="duration" className="block mb-2 text-sm font-medium text-gray-900">
-          Duration
-        </label>
-        <input
-          type="text"
-          id="duration"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Duration"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="financial_support_others" className="block mb-2 text-sm font-medium text-gray-900">
-          Financial Support (Others)
-        </label>
-        <input
-          type="number"
-          id="financial_support_others"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Financial Support (Others)"
-          value={financialSupportOthers}
-          onChange={(e) => setFinancialSupportOthers(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="financial_support_srmist" className="block mb-2 text-sm font-medium text-gray-900">
-          Financial Support (SRMIST)
-        </label>
-        <input
-          type="number"
-          id="financial_support_srmist"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Financial Support (SRMIST)"
-          value={financialSupportSRMIST}
-          onChange={(e) => setFinancialSupportSRMIST(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="estimated_budget" className="block mb-2 text-sm font-medium text-gray-900">
-          Estimated Budget
-        </label>
-        <input
-          type="number"
-          id="estimated_budget"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Estimated Budget"
-          value={estimatedBudget}
-          onChange={(e) => setEstimatedBudget(e.target.value)}
-        />
-      </div>
+    <div className="flex justify-center items-center min-h-screen p-4 ">
+      <Card className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-3xl overflow-auto">
+        <CardHeader>
+          <CardTitle>Create Event</CardTitle>
+          <CardDescription>Deploy your new event in one-click.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Event Title */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="event_title">Event Title</Label>
+                <Input
+                  type="text"
+                  id="event_title"
+                  placeholder="Name of your Event"
+                  value={eventTitle}
+                  onChange={(e) => setEventTitle(e.target.value)}
+                  required
+                />
+              </div>
 
-      <button
-        type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-      >
-        Submit
-      </button>
-    </form>
+              {/* Category */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="event_category">Category</Label>
+                <Select
+                  onValueChange={(value) => setCategory(value)}
+                >
+                  <SelectTrigger id="framework">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="hackathon">Hackathon</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                    <SelectItem value="event">Tech Event</SelectItem>
+                    <SelectItem value="ideathon">Ideathon</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Convenor Name */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="convenor_name">Convenor Name</Label>
+                <Input
+                  type="text"
+                  id="convenor_name"
+                  placeholder="Name of Convenor"
+                  value={convenorName}
+                  onChange={(e) => setConvenorName(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Convenor Designation */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="convenor_designation">Convenor Designation</Label>
+                <Input
+                  type="text"
+                  id="convenor_designation"
+                  placeholder="Designation of Convenor"
+                  value={convenorDesignation}
+                  onChange={(e) => setConvenorDesignation(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Email */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="mail_id">Email</Label>
+                <Input
+                  type="email"
+                  id="mail_id"
+                  placeholder="Email"
+                  value={mailId}
+                  onChange={(e) => setMailId(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Mobile Number */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="mobile_number">Mobile Number</Label>
+                <Input
+                  type="tel"
+                  id="mobile_number"
+                  placeholder="Enter Mobile Number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Proposed Period */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="mobile_number">From Date</Label>
+                <Input
+                  type="date"
+                  id="Start"
+                  placeholder="Start"
+                  value={fromData}
+                  onChange={(e) => setFromDate(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="mobile_number">To Date</Label>
+                <Input
+                  type="date"
+                  id="End"
+                  placeholder="End"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                />
+              </div>
+
+              {/* Duration */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="duration">Duration</Label>
+                <Input
+                  type="number"
+                  id="duration"
+                  placeholder="Enter Number of Days"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Financial Support (Others) */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="financial_support_others">Financial Support (Others)</Label>
+                <Input
+                  type="number"
+                  id="financial_support_others"
+                  placeholder="Enter other Financial Support"
+                  value={financialSupportOthers}
+                  onChange={(e) => setFinancialSupportOthers(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Financial Support (SRMIST) */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="financial_support_srmist">Financial Support (SRMIST)</Label>
+                <Input
+                  type="number"
+                  id="financial_support_srmist"
+                  placeholder="Enter SRMIST Financial Support"
+                  value={financialSupportSRMIST}
+                  onChange={(e) => setFinancialSupportSRMIST(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Estimated Budget */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="estimated_budget">Estimated Budget</Label>
+                <Input
+                  type="number"
+                  id="estimated_budget"
+                  placeholder="Enter Estimated Budget"
+                  value={estimatedBudget}
+                  onChange={(e) => setEstimatedBudget(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            <Button type="submit" className="mt-4">Submit</Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
-};
-
-export default EventForm;
+}
