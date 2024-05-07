@@ -12,7 +12,6 @@ import { useSession } from 'next-auth/react'
 export default function Dashboard() {
   const router = useRouter();
   const session = useSession();
-
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.push("/");
@@ -22,7 +21,7 @@ export default function Dashboard() {
   }, [session.status, router]);
   return (
 
-    <div>
+    <div >
       <div className='pb-40'>
         <Appbar></Appbar>
       </div>
@@ -35,10 +34,10 @@ export default function Dashboard() {
         </h1>
       </div>
 
-      <div className="flex m-5 p-5">
+      <div className="flex m-5 p-5 ">
         <div className="flex flex-col md:flex-row w-full h-screen">
           {/* Left Section */}
-          <div className="flex-1 p-4 md:w-1/3 lg:w-1/4 flex flex-col justify-center">
+          <div className="flex-1 p-4 md:w-1/3 lg:w-1/4 flex flex-col justify-center ">
             <EventForm />
           </div>
 

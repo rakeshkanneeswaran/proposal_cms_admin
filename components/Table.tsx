@@ -202,7 +202,7 @@ export default function EventTable() {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white rounded-md shadow-lg">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter mailIds..."
