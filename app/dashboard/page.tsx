@@ -3,16 +3,34 @@
 import EventTable from '@/components/Table'
 import { ModeToggle } from '@/components/ModeToggle'
 import EventForm from '@/components/eventform'
+import { Appbar } from '@/components/appbar'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react'
 
 
 export default function Dashboard() {
+  const router = useRouter();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/");
+    } else {
+      router.push("/dashboard");
+    }
+  }, [session.status, router]);
   return (
+
     <div>
+      <div className='pb-40'>
+        <Appbar></Appbar>
+      </div>
       <div className="absolute top-0 right-0 p-4 md:p-6 lg:p-8 ">
         <ModeToggle />
       </div>
       <div className="flex justify-center w-full p-4 md:p-8">
-        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 dark:from-neutral-200 dark:to-neutral-600 md:mt-0">
+        <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-emerald-600 to-sky-400  md:mt-0">
           Dashboard
         </h1>
       </div>
