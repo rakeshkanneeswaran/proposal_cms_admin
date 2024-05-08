@@ -29,16 +29,14 @@ export default function Dashboard() {
       <div className='pb-40'>
         <Appbar />
       </div>
-      <div className="absolute top-0 right-0 p-4 md:p-6 lg:p-8">
-        <ModeToggle />
-      </div>
       <div className="flex justify-center w-full p-4 md:p-8">
         <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-emerald-600 to-sky-400 md:mt-0">
           Dashboard
         </h1>
       </div>
 
-      <div className="flex m-5 p-5">
+      <div className='m-0'>
+      <div className="flex m-3 p-3">
         <div className="flex flex-col md:flex-row w-full h-screen">
           {/* Left Section */}
           <div className="flex-1 p-4 md:w-1/3 lg:w-1/4 flex flex-col justify-center">
@@ -50,6 +48,7 @@ export default function Dashboard() {
             <EventTable />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
