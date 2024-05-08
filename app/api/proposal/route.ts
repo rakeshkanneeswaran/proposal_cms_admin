@@ -10,10 +10,47 @@ import { getServerSession } from "next-auth"
 // Response: Returns a JSON object containing all proposals or an error message if not authorized.
 
 
-export async function GET() {
+// export async function GET() {
+//     const session = await getServerSession();
+//     if (session?.user?.name) {
+//         console.log(session?.user?.name)
+//         try {
+//             const existingUser = await prisma.admin.findFirst({
+//                 where: {
+//                     username: session?.user?.name
+//                 }
+//             });
+//             if (existingUser) {
+//                 const allproposal = await prisma.proposal.findMany()
+//                 console.log("printing all proposals")
+//                 console.log(allproposal)
+//                 return NextResponse.json({ proposal: allproposal })
+
+//             }
+//         } catch (error) {
+//             console.log(error)
+//         }
+//     }
+//     else {
+//         return NextResponse.json({ proposal: "something went wrong while fetching" })
+//     }
+//     console.log(session?.user?.name)
+//     return NextResponse.json({ proposal: "something went wrong while fetching" })
+// }
+
+
+//--------------------------------------------------------------------------------------------------------------------------------
+
+// GET All Proposals or Proposal by ID
+// Endpoint URL: /api/proposal or /api/proposal?id={proposalId}
+// Method: GET
+// Description: Fetches all proposals or a specific proposal by ID if the authenticated user is authorized as an admin.
+// Query Parameter: id (optional) - ID of the proposal to retrieve
+// Response: Returns a JSON object containing all proposals or a specific proposal data, or an error message if not authorized or proposal not found.
+
+export async function GET(request: NextRequest) {
     const session = await getServerSession();
     if (session?.user?.name) {
-        console.log(session?.user?.name)
         try {
             const existingUser = await prisma.admin.findFirst({
                 where: {
@@ -21,22 +58,38 @@ export async function GET() {
                 }
             });
             if (existingUser) {
-                const allproposal = await prisma.proposal.findMany()
-                console.log("printing all proposals")
-                console.log(allproposal)
-                return NextResponse.json({ proposal: allproposal })
-
+                const searchParams = request.nextUrl.searchParams;
+                const proposalId = searchParams.get('id');
+                if (proposalId) {
+                    // Fetch a specific proposal by ID
+                    const proposal = await prisma.proposal.findUnique({
+                        where: { id: parseInt(proposalId) }
+                    });
+                    if (proposal) {
+                        return NextResponse.json({ proposal });
+                    } else {
+                        return NextResponse.json({ "message": "Proposal not found" });
+                    }
+                } else {
+                    // Fetch all proposals
+                    const allproposal = await prisma.proposal.findMany();
+                    console.log("printing all proposals");
+                    console.log(allproposal);
+                    return NextResponse.json({ proposal: allproposal });
+                }
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            return NextResponse.json({ "message": "Something went wrong while fetching the proposal(s)" });
         }
     }
-    else {
-        return NextResponse.json({ proposal: "something went wrong while fetching" })
-    }
-    console.log(session?.user?.name)
-    return NextResponse.json({ proposal: "something went wrong while fetching" })
+    return NextResponse.json({ "message": "Unauthorized" });
 }
+
+
+
+
+
 
 
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -172,7 +225,7 @@ export async function PUT(request: NextRequest) {
         } catch (error) {
             console.log(error)
             return NextResponse.json({ messgae: "Your are not authentication" })
-           
+
         }
     }
 
