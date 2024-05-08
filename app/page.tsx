@@ -23,11 +23,11 @@ export default function LoginForm() {
     }
   }, [router, session]);
 
-  const handleUsernameChange = (e: any) => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
 
-  const handlePasswordChange = (e: any) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
