@@ -1,5 +1,5 @@
 'use client'
-
+//dashboard
 import EventTable from '@/components/Table'
 import { ModeToggle } from '@/components/ModeToggle'
 import EventForm from '@/components/eventform'
