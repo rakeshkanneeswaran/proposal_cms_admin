@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "cd database && prisma generate"
+    "postinstall": "cd database && npx prisma generate"
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^0.6.0",
