@@ -2,15 +2,16 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
+import { signOut} from 'next-auth/react';
 interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
 }
-import { signOut} from 'next-auth/react';
+
+const router = useRouter();
+const session: Session = useSession();
+
 export const Appbardashboard = () => {
-
- const router = useRouter();
-  const session: Session = useSession();
-
+  
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.push("/signin");
