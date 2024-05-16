@@ -7,10 +7,13 @@ interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
 }
 
-const router = useRouter();
-const session: Session = useSession();
+
+
 
 export const Appbardashboard = () => {
+
+    const router = useRouter();
+    const session: Session = useSession();
   
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -18,7 +21,7 @@ export const Appbardashboard = () => {
     } else {
       router.push("/dashboard");
     }
-  }, [session.status, router]);
+  }, [session.status, router,session , session]);
 
 
   return (
