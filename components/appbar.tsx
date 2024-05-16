@@ -4,16 +4,8 @@ import { signOut, useSession } from 'next-auth/react';
 import { ModeToggle } from './ModeToggle';
 
 export const Appbar = () => {
-  const router = useRouter();
-  const session = useSession();
+  
 
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/signin");
-    } else {
-      router.push("/dashboard");
-    }
-  }, [session.status, router]);
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
@@ -24,19 +16,6 @@ export const Appbar = () => {
         </a>
         <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          
-          {/* Conditionally render logout button if session is authenticated */}
-          {session.status === "authenticated" && (
-            <div className='pl-3'>
-            <button
-              type="button"
-              className="text-white bg-blue-700 h-14  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-              onClick={() => signOut()}
-            >
-              Logout
-            </button>
-            </div>
-          )}
         </div>
       </div>
     </nav>
