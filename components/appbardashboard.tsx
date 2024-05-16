@@ -1,7 +1,25 @@
 
-
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react'
+interface Session {
+  status: 'authenticated' | 'unauthenticated' | 'loading';
+}
 import { signOut} from 'next-auth/react';
 export const Appbardashboard = () => {
+
+    const router = useRouter();
+  const session: Session = useSession();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/signin");
+    } else {
+      router.push("/dashboard");
+    }
+  }, [session.status, router]);
+
+  
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

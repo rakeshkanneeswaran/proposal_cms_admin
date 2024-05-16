@@ -12,16 +12,7 @@ interface Session {
 }
 
 export default function Dashboard() {
-  const router = useRouter();
-  const session: Session = useSession();
-
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/signin");
-    } else {
-      router.push("/dashboard");
-    }
-  }, [session.status, router]);
+  
 
   return (
     <div>
