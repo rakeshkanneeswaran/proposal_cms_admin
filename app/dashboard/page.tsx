@@ -1,13 +1,12 @@
 'use client'
 //dashboard
 import EventTable from '@/components/Table'
-import { ModeToggle } from '@/components/ModeToggle'
 import EventForm from '@/components/eventform'
 import { Appbar } from '@/components/appbar'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
-
+import { Appbardashboard } from '@/components/appbardashboard';
 interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
 }
@@ -18,7 +17,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
-      router.push("/");
+      router.push("/signin");
     } else {
       router.push("/dashboard");
     }
@@ -27,7 +26,7 @@ export default function Dashboard() {
   return (
     <div>
       <div className='pb-40'>
-        <Appbar />
+        <Appbardashboard />
       </div>
       <div className="flex justify-center w-full p-4 md:p-8">
         <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-emerald-600 to-sky-400 md:mt-0">

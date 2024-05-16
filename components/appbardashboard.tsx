@@ -1,20 +1,7 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';;
-import { signOut, useSession } from 'next-auth/react';
-import { ModeToggle } from './ModeToggle';
 
-export const Appbar = () => {
-  const router = useRouter();
-  const session = useSession();
 
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/signin");
-    } else {
-      router.push("/dashboard");
-    }
-  }, [session.status, router]);
-
+import { signOut} from 'next-auth/react';
+export const Appbardashboard = () => {
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -24,9 +11,6 @@ export const Appbar = () => {
         </a>
         <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          
-          {/* Conditionally render logout button if session is authenticated */}
-          {session.status === "authenticated" && (
             <div className='pl-3'>
             <button
               type="button"
@@ -36,7 +20,6 @@ export const Appbar = () => {
               Logout
             </button>
             </div>
-          )}
         </div>
       </div>
     </nav>
