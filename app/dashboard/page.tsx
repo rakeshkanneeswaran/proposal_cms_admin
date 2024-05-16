@@ -2,7 +2,6 @@
 //dashboard
 import EventTable from '@/components/Table'
 import EventForm from '@/components/eventform'
-import { Appbar } from '@/components/appbar'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
@@ -12,7 +11,16 @@ interface Session {
 }
 
 export default function Dashboard() {
-  
+  const router = useRouter();
+  const session: Session = useSession();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/signin");
+    } else {
+      router.push("/dashboard");
+    }
+  }, [session.status, router]);
 
   return (
     <div>

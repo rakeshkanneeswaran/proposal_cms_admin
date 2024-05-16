@@ -8,7 +8,7 @@ interface Session {
 import { signOut} from 'next-auth/react';
 export const Appbardashboard = () => {
 
-    const router = useRouter();
+ const router = useRouter();
   const session: Session = useSession();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const Appbardashboard = () => {
     }
   }, [session.status, router]);
 
-  
+
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
