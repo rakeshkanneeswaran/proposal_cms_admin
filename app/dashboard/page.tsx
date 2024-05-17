@@ -14,18 +14,15 @@ interface Session {
 export default function Dashboard() {
   const router = useRouter();
   const session: Session = useSession();
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/signin");
-    } else {
-      router.push("/dashboard");
-    }
-  }, [session.status, router]);
+  
 
   return (
     <div>
       <div className='pb-40'>
-        <Appbardashboard onClick={signOut}/>
+        <Appbardashboard onClick={async ()=>{
+          await signOut()
+          router.push("/signin")
+        }}/>
       </div>
       <div className="flex justify-center w-full p-4 md:p-8">
         <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-emerald-600 to-sky-400 md:mt-0">
