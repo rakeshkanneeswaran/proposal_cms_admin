@@ -27,8 +27,7 @@ export default function Dashboard() {
     <div>
       <div className='pb-40'>
         <Appbardashboard onClick={async ()=>{
-          await signOut()
-          router.push("/signin")
+          await signOut({ callbackUrl: '/signin' })
         }}/>
       </div>
       <div className="flex justify-center w-full p-4 md:p-8">
