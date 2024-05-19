@@ -11,16 +11,16 @@ interface Session {
 
 export const Appbardashboard = ({ onClick, children }: any) => {
 
-  //   const router = useRouter();
-  //   const session: Session = useSession();
+    const router = useRouter();
+    const session: Session = useSession();
   
-  // useEffect(() => {
-  //   if (session.status === "unauthenticated") {
-  //     router.push("/signin");
-  //   } else {
-  //     router.push("/dashboard");
-  //   }
-  // }, [session.status, router,session , session]);
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/signin");
+    } else {
+      router.push("/dashboard");
+    }
+  }, [session.status, router,session , session]);
 
 
   return (
