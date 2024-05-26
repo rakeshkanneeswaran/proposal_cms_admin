@@ -5,37 +5,34 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Appbar } from '@/components/appbar';
 
-
 export default function LoginForm() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);  // New state for loading
   const session = useSession();
 
-
   // Redirect user based on session status
-
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.push("/signin");
-    }
-   else if (session.status === "authenticated") {
+    } else if (session.status === "authenticated") {
       router.push("/dashboard");
     }
   }, [router, session]);
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUsernameChange = (e : any) => {
     setUsername(e.target.value);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e : any) => {
     setPassword(e.target.value);
   };
 
   const handleLogin = async () => {
-
+    setLoading(true);  // Set loading to true
     try {
-      console.log("login function ran")
+      console.log("login function ran");
       const res = await signIn("credentials", {
         username,
         password,
@@ -52,11 +49,13 @@ export default function LoginForm() {
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please try again later.");
+    } finally {
+      setLoading(false);  // Set loading to false
     }
   };
 
   return (
-    <div className=" h-screen">
+    <div className="h-screen">
       <div className='pb-32'>
         <Appbar></Appbar>
       </div>
@@ -67,16 +66,15 @@ export default function LoginForm() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-400">
                 Department of Computing Technologies
               </span>{' '}
-              <span > In-House Proposal Management</span>
-              <p className='text-xl font-normal  pt-3 '>Discover a powerful tool for proposal management created by the Department of Computing Technologies (CTech) in collaboration with talented students from the School of Computing at SRM University. This innovative platform, known as SRM Event Connect, simplifies and enhances the proposal management process with its intuitive design and advanced features. Ideal for organizing events, projects, and initiatives, SRM Event Connect streamlines proposal creation, submission, and review.</p>
-
+              <span> In-House Proposal Management</span>
+              <p className='text-xl font-normal pt-3'>
+                Discover a powerful tool for proposal management created by the Department of Computing Technologies (CTech) in collaboration with talented students from the School of Computing at SRM University. This innovative platform, known as SRM Event Connect, simplifies and enhances the proposal management process with its intuitive design and advanced features. Ideal for organizing events, projects, and initiatives, SRM Event Connect streamlines proposal creation, submission, and review.
+              </p>
             </h1>
-
-
           </div>
 
           <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-            <h2 className="text-gray-900 text-lg font-medium title-font mb-5">Sign as Computing technologies Adimistrator</h2>
+            <h2 className="text-gray-900 text-lg font-medium title-font mb-5">Sign in as Computing Technologies Administrator</h2>
 
             <div className="relative mb-4">
               <label htmlFor="username" className="leading-7 text-sm text-gray-600">Username</label>
@@ -85,7 +83,7 @@ export default function LoginForm() {
                 id="username"
                 value={username}
                 onChange={handleUsernameChange}
-                className="w-full  rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>
 
@@ -102,16 +100,22 @@ export default function LoginForm() {
 
             <button
               type='button'
-              className=" bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
+              className="bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
               onClick={handleLogin}
+              disabled={loading}  // Disable button when loading
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
 
-
+            {loading && (
+              <div className="mt-4 text-center">
+                <p className="text-gray-600">Signing you in, please wait...</p>
+                <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-green-500" role="status"></div>
+              </div>
+            )}
 
             <p className="text-xs text-gray-500 mt-3">
-              If unable to sign in , contact the maintainers.
+              If unable to sign in, contact the maintainers.
             </p>
           </div>
         </div>
