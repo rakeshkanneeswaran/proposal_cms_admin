@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Appbar } from '@/components/appbar';
-import * as XLSX from "xlsx" // Ensure proper import
+import * as XLSX from "xlsx"
+import { signOut } from 'next-auth/react';
 
-import { Appbarexcelpage } from '@/components/appexceldashboard';
+import { Appbarexcel } from '@/components/appexceldashboard';
 import { useSession } from 'next-auth/react'
 interface Session {
     status: 'authenticated' | 'unauthenticated' | 'loading';
@@ -25,12 +25,11 @@ interface User {
 }
 type UserArray = User[];
 
-
 export default function Excelpage() {
-    const [filename, setFileName] = useState("Your file name will appear here")
+    const [filename, setFileName] = useState("Your file name will appear here");
+    const [userData, setUserData] = useState<UserArray | null>(null);
     const { data: session, status } = useSession();
     const username = session?.user?.name;
-
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -42,62 +41,82 @@ export default function Excelpage() {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData: UserArray = XLSX.utils.sheet_to_json(worksheet);
             if (!jsonData) {
-                console.log("data not avalabel")
-            }
-
-            else {
-
+                console.log("data not available");
+            } else {
+                setUserData(jsonData);
                 console.log(jsonData);
-                for (let i = 0; i < jsonData.length; i++) {
-                    console.log(jsonData[i].eventTitle);
-                    console.log(jsonData[i].category);
-                    console.log(jsonData[i].convenorName);
-                    console.log(jsonData[i].convenorDesignation);
-                    console.log(jsonData[i].mailId);
-                    console.log(jsonData[i].mobileNumber);
-                    console.log(jsonData[i].proposedPeriod);
-                    console.log(jsonData[i].financialSupportOthers);
-                    console.log(jsonData[i].financialSupportSRMIST);
-                    console.log(jsonData[i].estimatedBudget);
-                    const result = await axios.post('/api/proposal', {
-                        eventTitle: jsonData[i].eventTitle,
-                        category: jsonData[i].category,
-                        convenorName: jsonData[i].convenorName,
-                        convenorDesignation: jsonData[i].convenorDesignation,
-                        mailId: jsonData[i].mailId,
-                        mobileNumber: jsonData[i].mobileNumber,
-                        proposedPeriod: jsonData[i].proposedPeriod,
-                        duration: JSON.stringify(jsonData[i].duration),
-                        financialSupportOthers: JSON.stringify(jsonData[i].financialSupportOthers),
-                        financialSupportSRMIST: JSON.stringify(jsonData[i].financialSupportSRMIST),
-                        estimatedBudget: JSON.stringify(jsonData[i].estimatedBudget),
-                        username
-                    });
-
-
-
-                }
-
-                console.log(session)
             }
-
-
-
         } else {
             console.error("No file selected");
         }
     }
 
+    const handleUpload = async () => {
+        if (!userData) {
+            console.error("No data to upload");
+            alert("No data to upload . Please upload excel sheet in perscribed format")
+            return;
+        }
+
+        for (let i = 0; i < userData.length; i++) {
+            try {
+                const result = await axios.post('/api/proposal', {
+                    eventTitle: userData[i].eventTitle,
+                    category: userData[i].category,
+                    convenorName: userData[i].convenorName,
+                    convenorDesignation: userData[i].convenorDesignation,
+                    mailId: userData[i].mailId,
+                    mobileNumber: userData[i].mobileNumber,
+                    proposedPeriod: userData[i].proposedPeriod,
+                    duration: JSON.stringify(userData[i].duration),
+                    financialSupportOthers: JSON.stringify(userData[i].financialSupportOthers),
+                    financialSupportSRMIST: JSON.stringify(userData[i].financialSupportSRMIST),
+                    estimatedBudget: JSON.stringify(userData[i].estimatedBudget),
+                    username
+                });
+                console.log(result.data);
+
+                if (result.data.messgae === "Validation error") {
+                    console.error("Validation error:", result.data.message);
+                    alert("Validation error: Improper format for excel file validation");
+                    return;
+                }
+
+            } catch (error) {
+
+                console.log("error identifird")
+                console.error("Error uploading data", error);
+            }
+        }
+        alert("all data has been added successfully");
+
+        console.log("All data uploaded");
+    }
+
     return (
         <div>
-            <Appbarexcelpage></Appbarexcelpage>
+           <Appbarexcel onClick = {async ()=>{
+          await signOut({ callbackUrl: '/signin' })
+        }} ></Appbarexcel>
             <div className='py-16'></div>
-            <div>This is the Excel page</div>
-            <div>{filename}</div>
-            <div>
-                <input type="file" accept=".xlsx, .xls" onChange={handleFile} />
 
+            <div className='flex flex-col items-center'>
+                <h1 className="mb-4 text-lg md:text-lg font-bold  text-cente uppercase  leading-none tracking-tight text-gray-900  lg:text-xl dark:text-white">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-800 to-blue-600">
+                        By Choosing  your excel file your can directly add the details. please make sure that excel file is present in the prescribed format
+                    </span>{' '}
+                </h1>
+
+
+                <div className="mb-4 text-lg md:text-lg font-bold  text-cente uppercase  leading-none tracking-tight text-gray-900  lg:text-xl dark:text-white">SELECTED FILE: {filename} </div>
+                <div>
+                    <input type="file" accept=".xlsx, .xls" onChange={handleFile} />
+                </div>
+                <div>
+                    <button type="button" onClick={handleUpload} className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Upload Data</button>
+                </div>
             </div>
+
         </div>
     )
 }
