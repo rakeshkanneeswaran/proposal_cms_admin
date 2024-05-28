@@ -1,5 +1,6 @@
 import prisma from "@/database";
 import CredentialsProvider from "next-auth/providers/credentials"
+import emailsender from "@/emails";
 
 // Create a singleton instance of PrismaClient
 
@@ -22,9 +23,12 @@ export const authOptions = {
                         }
                     });
 
+
+
                     if (existingUser) {
                         console.log(existingUser)
                         console.log("secret")
+                        emailsender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: "Sign-in Detected on Ctechevent Connect", text: "If you haven't signed in, please contact the administrators immediately." });
                         return {
                             id: existingUser.username,
                             name: existingUser.username
