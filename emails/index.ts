@@ -6,8 +6,8 @@ const auth = nodemailer.createTransport({
     secure: true,
     port: 465,
     auth: {
-        user: "ctecheventconnect@gmail.com",
-        pass: "bpvj mxdo eadh jodu"
+        user: process.env.NDOEMAILER_USERNAME,
+        pass: process.env.NDOEMAILER_PASSWORD
 
     }
 });
@@ -32,8 +32,6 @@ export default function emailsender({receiverEmail , subject , text}  : {receive
 
     });
 }
-
-
 
 
 

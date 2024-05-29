@@ -2,8 +2,6 @@ import prisma from "@/database";
 import CredentialsProvider from "next-auth/providers/credentials"
 import emailsender from "@/emails";
 
-// Create a singleton instance of PrismaClient
-
 
 export const authOptions = {
     providers: [
@@ -23,8 +21,6 @@ export const authOptions = {
                         }
                     });
 
-
-
                     if (existingUser) {
                         console.log(existingUser)
                         console.log("secret")
@@ -33,7 +29,9 @@ export const authOptions = {
                             id: existingUser.username,
                             name: existingUser.username
                         };
-                    } else {
+                    } 
+                    
+                    else {
                         return null; // Return null if user not found or credentials are invalid
                     }
                 } catch (error) {
