@@ -23,7 +23,7 @@ export default function emailsender({receiverEmail , subject , text}  : {receive
         text: text
     };
 
-    console.log("sending email")
+    console.log("sending email to the receiver: " + receiver)
 
     auth.sendMail(receiver, (error: any, emailResponse: any) => {
         if (error)
