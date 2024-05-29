@@ -95,6 +95,9 @@ export default function Excelpage() {
 
     return (
         <div>
+            <div className='py-6'>
+
+            </div>
            <Appbarexcel onClick = {async ()=>{
           await signOut({ callbackUrl: '/signin' })
         }} ></Appbarexcel>
@@ -102,7 +105,7 @@ export default function Excelpage() {
 
             <div className='flex flex-col items-center'>
                 <h1 className="mb-4 text-lg md:text-lg font-bold  text-cente uppercase  leading-none tracking-tight text-gray-900  lg:text-xl dark:text-white">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-800 to-blue-600">
+                    <span className="text-red-600">
                         By Choosing  your excel file your can directly add the details. please make sure that excel file is present in the prescribed format
                     </span>{' '}
                 </h1>

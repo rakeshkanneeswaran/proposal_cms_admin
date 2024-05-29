@@ -22,7 +22,7 @@ export default function Dashboard() {
     }
   }, [session.status, router,session , session]);
   
-
+  
   return (
     <div>
       <div className='pb-40'>
