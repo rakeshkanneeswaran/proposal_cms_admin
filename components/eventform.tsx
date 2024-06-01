@@ -75,75 +75,64 @@ export default function EventForm() {
         - Estimated Budget: ${estimatedBudget}
       `;
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    if (status === "unauthenticated") {
-      alert("Please sign in first");
-      return;
-    }
-
-    try {
-
-      const result = await axios.post('/api/proposal', {
-        eventTitle,
-        category,
-        convenorName,
-        convenorDesignation,
-        mailId,
-        mobileNumber,
-        proposedPeriod: `${fromData} - ${toDate}`,
-        duration,
-        financialSupportOthers,
-        financialSupportSRMIST,
-        estimatedBudget,
-        username
-      });
-
-     
-
-        console.log("status code sent by server is " + result.status)
-
-        const sendingEmailResult = await axios.post('/api/emailerapi', {
-          subject: confirmationSubject,
-          text: confirmationBody,
-          receiverEmail: mailId
-
-        });
-
-        if (sendingEmailResult.status == 200) {
-          console.log("Email sent to applicant with email: " + mailId);
-          alert("Event submitted successfully, and email sent to applicant.");
-        } else {
-          console.log("Email not sent to applicant with email: " + mailId);
-          alert("Event submitted successfully, but email not sent to applicant.");
-        }
-
-
-
+      const handleSubmit = async (e: any) => {
+        e.preventDefault();
       
-    
-    
-
-
-  // Reset form fields after successful submission
-  setEventTitle('');
-  setCategory('');
-  setConvenorName('');
-  setConvenorDesignation('');
-  setMailId('');
-  setMobileNumber('');
-  setProposedPeriod('');
-  setDuration('');
-  setFinancialSupportOthers('');
-  setFinancialSupportSRMIST('');
-  setEstimatedBudget('');
-} catch (error) {
-  console.error("Error creating event:", error);
-  alert("Failed to create event. Please try again later.");
-
-}
-  };
+        if (status === "unauthenticated") {
+          alert("Please sign in first");
+          return;
+        }
+      
+        try {
+          const result = await axios.post('/api/proposal', {
+            eventTitle,
+            category,
+            convenorName,
+            convenorDesignation,
+            mailId,
+            mobileNumber,
+            proposedPeriod: `${fromData} - ${toDate}`,
+            duration,
+            financialSupportOthers,
+            financialSupportSRMIST,
+            estimatedBudget,
+            username
+          });
+      
+          console.log("status code sent by server is " + result.status);
+      
+          const sendingEmailResult = await axios.post('/api/emailerapi', {
+            subject: confirmationSubject,
+            text: confirmationBody,
+            receiverEmail: mailId
+          });
+      
+          if (sendingEmailResult.status == 200) {
+            console.log("Email sent to applicant with email: " + mailId);
+            alert("Event submitted successfully, and email sent to applicant.");
+          } else {
+            console.log("Email not sent to applicant with email: " + mailId);
+            alert("Event submitted successfully, but email not sent to applicant.");
+          }
+      
+          // Reset form fields after successful submission
+          setEventTitle('');
+          setCategory('');
+          setConvenorName('');
+          setConvenorDesignation('');
+          setMailId('');
+          setMobileNumber('');
+          setProposedPeriod('');
+          setDuration('');
+          setFinancialSupportOthers('');
+          setFinancialSupportSRMIST('');
+          setEstimatedBudget('');
+        } catch (error : any) {
+          console.error("Error creating event:", error.response?.data || error.message);
+          alert("Failed to create event. Please try again later.");
+        }
+      };
+      
 
 return (
   <div className="flex justify-center items-center min-h-screen p-4 ">
