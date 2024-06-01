@@ -1,50 +1,52 @@
+import nodemailer from "nodemailer";
 
-import nodemailer from "nodemailer"
-
-const auth = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
+const transporter = nodemailer.createTransport({
     port: 465,
+    host: "smtp.gmail.com",
     auth: {
         user: process.env.NDOEMAILER_USERNAME,
         pass: process.env.NDOEMAILER_PASSWORD
-
     },
-    tls: { rejectUnauthorized: false },
+    secure: true,
+    tls: { rejectUnauthorized: false }
 });
 
-
-export default async function emailsender({ receiverEmail, subject, text }: { receiverEmail: string, subject: string, text: string }) {
-
-    const receiver = {
+export default async function emailSender({ receiverEmail , subject, text } : {receiverEmail : string, subject : string, text : string}) {
+    const mailOptions = {
         from: "ctecheventconnect@gmail.com",
         to: receiverEmail,
         subject: subject,
-        text: text
+        text: text,
+        html: `<p>${text}</p>`
     };
 
-    console.log("sending email to the receiver: " + receiver)
-
-    auth.sendMail(receiver, (error: any, emailResponse: any) => {
-        if (error) {
-            throw error;
-        }
-        console.log("success!");
-        console.log("email sent to " + receiver)
-
+    // Verify the connection configuration
+    await new Promise((resolve, reject) => {
+        transporter.verify(function (error, success) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log("Server is ready to take our messages");
+                resolve(success);
+            }
+        });
     });
 
-    return "success!";
+    // Send the email
+    await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                console.log(info);
+                resolve(info);
+            }
+        });
+    });
 
-
-
-
+    return "Success!";
 }
-
-
-
-
-
-
 
 
