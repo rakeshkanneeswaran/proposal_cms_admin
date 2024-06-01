@@ -9,7 +9,8 @@ const auth = nodemailer.createTransport({
         user: process.env.NDOEMAILER_USERNAME,
         pass: process.env.NDOEMAILER_PASSWORD
 
-    }
+    },
+    tls: { rejectUnauthorized: false },
 });
 
 
