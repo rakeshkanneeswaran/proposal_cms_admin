@@ -55,11 +55,26 @@ export default function Excelpage() {
     const handleUpload = async () => {
         if (!userData) {
             console.error("No data to upload");
-            alert("No data to upload . Please upload excel sheet in perscribed format")
+            alert("No data to upload. Please upload an excel sheet in the prescribed format.");
             return;
         }
 
         for (let i = 0; i < userData.length; i++) {
+            const confirmationBody = `
+                This is to confirm that your proposal has been approved with the following details:
+                - Event Title: ${userData[i].eventTitle}
+                - Category: ${userData[i].category}
+                - Convenor Name: ${userData[i].convenorName}
+                - Convenor Designation: ${userData[i].convenorDesignation}
+                - Email: ${userData[i].mailId}
+                - Mobile Number: ${userData[i].mobileNumber}
+                - Proposed Period: ${userData[i].proposedPeriod}
+                - Duration: ${JSON.stringify(userData[i].duration)} days
+                - Financial Support (Others): ${JSON.stringify(userData[i].financialSupportOthers)}
+                - Financial Support (SRMIST): ${JSON.stringify(userData[i].financialSupportSRMIST)}
+                - Estimated Budget: ${JSON.stringify(userData[i].estimatedBudget)}
+            `;
+
             try {
                 const result = await axios.post('/api/proposal', {
                     eventTitle: userData[i].eventTitle,
@@ -75,43 +90,30 @@ export default function Excelpage() {
                     estimatedBudget: JSON.stringify(userData[i].estimatedBudget),
                     username
                 });
-                const confirmationBody = `
-        This is to confirm that your proposal has been approved with the following details:
-        - Event Title: ${userData[i].eventTitle}
-        - Category: ${userData[i].category}
-        - Convenor Name: ${userData[i].convenorName}
-        - Convenor Designation: ${userData[i].convenorDesignation}
-        - Email: ${userData[i].mailId}
-        - Mobile Number: ${userData[i].mobileNumber}
-        - Proposed Period: ${userData[i].proposedPeriod}
-        - Duration: ${JSON.stringify(userData[i].duration)} days
-        - Financial Support (Others): ${JSON.stringify(userData[i].financialSupportOthers)}
-        - Financial Support (SRMIST): ${JSON.stringify(userData[i].financialSupportSRMIST)}
-        - Estimated Budget: ${JSON.stringify(userData[i].estimatedBudget)}
-      `;
-                const sendingEmailResult = await axios.post('/api/emailerapi', {
-                    subject: confirmationSubject,
-                    text: confirmationBody,
-                    receiverEmail: userData[i].mailId
 
-                });
-                console.log("email sent to appicant with email: " + userData[i].mailId)
-                "console.log(result.data);"
+                if (result.status === 200) {
+                    const sendingEmailResult = await axios.post('/api/emailerapi', {
+                        subject: confirmationSubject,
+                        text: confirmationBody,
+                        receiverEmail: userData[i].mailId
+                    });
 
-                if (result.data.messgae === "Validation error") {
-                    console.error("Validation error:", result.data.message);
-                    alert("Validation error: Improper format for excel file validation");
-                    return;
+                    if (sendingEmailResult.status === 200) {
+                        console.log("Email sent to applicant with email: " + userData[i].mailId);
+                    } else {
+                        console.log("Email not sent to applicant with email: " + userData[i].mailId);
+                        alert("Event submitted successfully, but email not sent to applicant.");
+                    }
+                } else {
+                    console.error("Error: Status code sent by server for accessing database is " + result.status);
+                    alert("Event not added. Email not sent to applicant.");
                 }
-
             } catch (error) {
-
-                console.log("error identifird")
                 console.error("Error uploading data", error);
+                alert("Failed to create event. Please try again later.");
             }
         }
-        alert("all data has been added successfully");
-
+        alert("All data has been added successfully.");
         console.log("All data uploaded");
     }
 
