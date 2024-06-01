@@ -100,7 +100,7 @@ export default function EventForm() {
         username
       });
 
-      if (result.status = 200) {
+     
 
         console.log("status code sent by server is " + result.status)
 
@@ -111,7 +111,7 @@ export default function EventForm() {
 
         });
 
-        if (sendingEmailResult.status === 200) {
+        if (sendingEmailResult.status == 200) {
           console.log("Email sent to applicant with email: " + mailId);
           alert("Event submitted successfully, and email sent to applicant.");
         } else {
@@ -121,12 +121,8 @@ export default function EventForm() {
 
 
 
-      }
-      else {
-        console.error("Error: Status code sent by server for accessing database is " + result.status);
-        alert("Event not added. Email not sent to applicant.");
-      }
-
+      
+    
     
 
 
