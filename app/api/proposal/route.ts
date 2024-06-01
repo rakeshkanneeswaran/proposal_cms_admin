@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
                 })
 
                 if (eventadded) {
-                    const emailResponse = await emailsender({ receiverEmail: body.mailId, subject: "Confirmation for your proposal submitted at ctech", text: text });
+                      emailsender({ receiverEmail: body.mailId, subject: "Confirmation for your proposal submitted at ctech", text: text });
                     
                         return NextResponse.json({
                             messgae: "Added event successfully",
