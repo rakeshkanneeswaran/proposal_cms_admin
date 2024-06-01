@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
+const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 
 export default function EventForm() {
     const { data: session, status } = useSession();
@@ -72,7 +73,7 @@ export default function EventForm() {
             if (response.status == 200) {
 
               const sendingEmailResult = await axios.post('/api/emailerapi', {
-                subject: "this is dashboard email",
+                subject: confirmationSubject,
                 text: confirmationBody,
                 receiverEmail: mailId
             });
