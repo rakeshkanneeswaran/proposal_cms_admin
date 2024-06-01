@@ -39,6 +39,7 @@ import {
 import axios from "axios";
 import { DatePickerWithRange } from "./DateRange";
 import { text } from "stream/consumers";
+import { AlertTriangle } from "lucide-react";
 
 export default function EventForm() {
   const { data: session, status } = useSession();
@@ -83,6 +84,7 @@ export default function EventForm() {
     }
 
     try {
+
       const result = await axios.post('/api/proposal', {
         eventTitle,
         category,
@@ -98,23 +100,39 @@ export default function EventForm() {
         username
       });
 
-      const sendingEmailResult = await axios.post('/api/emailerapi', {
-        subject: confirmationSubject,
-        text: confirmationBody,
-        receiverEmail: mailId
+      if (result.status = 200) {
 
-      });
+        console.log("status code sent by server is " + result.status)
 
+        const sendingEmailResult = await axios.post('/api/emailerapi', {
+          subject: confirmationSubject,
+          text: confirmationBody,
+          receiverEmail: mailId
 
+        });
 
+        if (sendingEmailResult.status == 200) {
+          console.log("status code sent by server for sending mail is " + sendingEmailResult.status)
+          console.log("email sent to appicant with email: " + mailId)
+          alert("Event submitted successfully!");
+          alert("Email sent successfully to applicant!")
+        }
 
+        else if (sendingEmailResult.status == 400) {
+          console.log("status code sent by server for sending mail is " + sendingEmailResult.status)
+          console.log("email not sent to appicant with email: " + mailId)
+          alert("Event submitted successfully!");
+          alert("Email not sent to applicant!")
+        }
 
+      }
 
-
-
-      console.log("Event created successfully:", result.data);
-      alert("Event submitted successfully!");
-      alert("Email sent successfully to applicant!")
+      else if (result.status == 400) {
+        console.log("status code sent by server for acessing database is  " + result.status)
+        console.log("therefore email not sent to appicant with email: " + mailId)
+        alert("Event not added");
+        alert("Email not sent to appicant with email: " + mailId)
+      }
 
 
       // Reset form fields after successful submission
@@ -132,6 +150,7 @@ export default function EventForm() {
     } catch (error) {
       console.error("Error creating event:", error);
       alert("Failed to create event. Please try again later.");
+
     }
   };
 

@@ -130,9 +130,10 @@ export async function POST(req: NextRequest) {
                 })
                 console.log("added data as follows")
                 console.log(eventadded)
-                return NextResponse.json({ messgae: "Added event successfully" })
+                return NextResponse.json({ messgae: "Added event successfully" }, { status: 200 })
             }
         } catch (error) {
+            return NextResponse.json({ message: "Event could not be added , please error while acessing database " }, { status: 400 })
             console.log(error)
         }
     }
