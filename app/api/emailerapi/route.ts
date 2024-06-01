@@ -4,10 +4,13 @@ import emailsender from '@/emails';
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
+
     try {
-        emailsender({ subject: body.subject, text: body.text, receiverEmail: body.receiverEmail })
+       const value = await emailsender({ subject: body.subject, text: body.text, receiverEmail: body.receiverEmail })
         console.log("sending email to the receiver: " + body.receiverEmail)
-        return NextResponse.json({ messgae: "conformation email sent to the applicant" }, { status: 200 })
+        console.log("the value of info return is " + JSON.stringify(value));
+
+        return NextResponse.json({ messgae: "conformation email sent to the applicant"  , info : JSON.stringify(value)}, { status: 200 })
 
     } catch (error) {
         console.log(error)

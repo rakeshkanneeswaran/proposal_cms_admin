@@ -23,8 +23,27 @@ export default function EventForm() {
     const [financialSupportOthers, setFinancialSupportOthers] = useState("");
     const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
     const [estimatedBudget, setEstimatedBudget] = useState('');
+  
+    
+    
 
-    const proposedPeriod = `${fromDate} - ${toDate}`;
+    let confirmationBody = `
+    This is to confirm that your proposal has been approved with the following details:
+    - Event Title: ${eventTitle}
+    - Category: ${category}
+    - Convenor Name: ${convenorName}
+    - Convenor Designation: ${convenorDesignation}
+    - Email: ${mailId}
+    - Mobile Number: ${mobileNumber}
+    - Proposed Period: ${fromDate} - ${toDate}
+    - Duration: ${JSON.stringify(duration)} days
+    - Financial Support (Others): ${JSON.stringify(financialSupportOthers)}
+    - Financial Support (SRMIST): ${JSON.stringify(financialSupportSRMIST)}
+    - Estimated Budget: ${JSON.stringify(estimatedBudget)}
+`;
+    
+
+  
 
     const handleSubmit = async (e : any) => {
         e.preventDefault();
@@ -42,7 +61,7 @@ export default function EventForm() {
                 convenorDesignation,
                 mailId,
                 mobileNumber,
-                proposedPeriod,
+                proposedPeriod : `${fromDate} - ${toDate}`,
                 duration,
                 financialSupportOthers,
                 financialSupportSRMIST,
@@ -50,8 +69,17 @@ export default function EventForm() {
                 username
             });
 
-            if (response.status === 200) {
-                alert("Event and email processed successfully.");
+            if (response.status == 200) {
+
+              const sendingEmailResult = await axios.post('/api/emailerapi', {
+                subject: "this is dashboard email",
+                text: confirmationBody,
+                receiverEmail: mailId
+            });
+
+            if (sendingEmailResult.status == 200) {
+              console.log(sendingEmailResult.data)
+              alert("Event and email processed successfully.");
                 // Reset form fields
                 setEventTitle('');
                 setCategory('');
@@ -65,6 +93,10 @@ export default function EventForm() {
                 setFinancialSupportOthers('');
                 setFinancialSupportSRMIST('');
                 setEstimatedBudget('');
+            }
+
+
+                
             }
         } catch (error) {
             console.error("Error submitting form", error);

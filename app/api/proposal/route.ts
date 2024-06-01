@@ -133,40 +133,16 @@ export async function POST(req: NextRequest) {
                     }
                 })
 
-                const text = confirmationBody({
-                    category: body.category,
-                    eventTitle: body.eventTitle,
-                    convenorName: body.convenorName,
-                    convenorDesignation: body.convenorDesignation,
-                    mailId: body.mailId,
-                    mobileNumber: body.mobileNumber,
-                    proposedPeriod: body.proposedPeriod,
-                    duration: body.duration,
-                    financialSupportOthers: body.financialSupportOthers,
-                    financialSupportSRMIST: body.financialSupportSRMIST,
-                    estimatedBudget: body.estimatedBudget
-                })
+                
+                console.log("added data as follows")
+                console.log(eventadded)
+                return NextResponse.json({ messgae: "processing the request" }, { status: 200 })
 
-                if (eventadded) {
-                      emailsender({ receiverEmail: body.mailId, subject: "Confirmation for your proposal submitted at ctech", text: text });
-                    
-                        return NextResponse.json({
-                            messgae: "Added event successfully",
-                            event: true,
-                            email: true
-                        }, { status: 200 })
-                }
 
-                else {
-                    console.log("added data as follows")
-                    console.log(eventadded)
-                    return NextResponse.json({ messgae: "Something went wrong in processing the request" }, { status: 200 })
-
-                }
             }
         } catch (error) {
             return NextResponse.json({ message: "Event could not be added , please error while acessing database " }, { status: 400 })
-            console.log(error)
+          
         }
     }
     return NextResponse.json({ messgae: "Validation error" })
