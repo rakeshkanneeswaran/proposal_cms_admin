@@ -10,10 +10,10 @@ export default function EventForm() {
   const username = session?.user?.name;
   const router = useRouter();
 
-  // State management as in the initial form
+  // State management
   const [eventTitle, setEventTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [fromData, setFromDate] = useState('');
+  const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [convenorName, setConvenorName] = useState('');
   const [convenorDesignation, setConvenorDesignation] = useState('');
@@ -24,6 +24,8 @@ export default function EventForm() {
   const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
   const [estimatedBudget, setEstimatedBudget] = useState('');
 
+  const proposedPeriod = `${fromDate} - ${toDate}`;
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -31,6 +33,21 @@ export default function EventForm() {
       alert("Please sign in first");
       return;
     }
+
+    const confirmationBody = `
+            This is to confirm that your proposal has been approved with the following details:
+            - Event Title: ${eventTitle}
+            - Category: ${category}
+            - Convenor Name: ${convenorName}
+            - Convenor Designation: ${convenorDesignation}
+            - Email: ${mailId}
+            - Mobile Number: ${mobileNumber}
+            - Proposed Period: ${proposedPeriod}
+            - Duration: ${duration} days
+            - Financial Support (Others): ${financialSupportOthers}
+            - Financial Support (SRMIST): ${financialSupportSRMIST}
+            - Estimated Budget: ${estimatedBudget}
+        `;
 
     try {
       const result = await axios.post('/api/proposal', {
@@ -40,7 +57,7 @@ export default function EventForm() {
         convenorDesignation,
         mailId,
         mobileNumber,
-        proposedPeriod: `${fromData} - ${toDate}`,
+        proposedPeriod,
         duration,
         financialSupportOthers,
         financialSupportSRMIST,
@@ -48,31 +65,44 @@ export default function EventForm() {
         username
       });
 
-      console.log("status code sent by server is " + result.status);
-      if (result.status == 200 && result.data.email == true) {
-        alert("Event added successfully and email sent successfully to applicant with email " + mailId)
-      }
-      else if (result.status == 200 && result.data.email == false) {
-        alert("Event added successfully, but email not sent to applicant.")
-      }
+      if (result.status === 200) {
+        const sendingEmailResult = await axios.post('/api/emailerapi', {
+          subject: "Acceptance of your proposal",
+          text: confirmationBody,
+          receiverEmail: mailId
+        });
 
-      // Reset form fields after successful submission
-      setEventTitle('');
-      setCategory('');
-      setConvenorName('');
-      setConvenorDesignation('');
-      setMailId('');
-      setMobileNumber('');
-      setFromDate('');
-      setToDate('');
-      setDuration('');
-      setFinancialSupportOthers('');
-      setFinancialSupportSRMIST('');
-      setEstimatedBudget('');
-    } catch (error: any) {
-      console.error("Error creating event:", error.response?.data || error.message);
+        if (sendingEmailResult.status === 200) {
+          console.log("Email sent to applicant with email: " + mailId);
+        } else {
+          console.log("Email not sent to applicant with email: " + mailId);
+          alert("Event submitted successfully, but email not sent to applicant.");
+        }
+      } else {
+        console.error("Error: Status code sent by server for accessing database is " + result.status);
+        alert("Event not added. Email not sent to applicant.");
+      }
+    } catch (error) {
+      console.error("Error uploading data", error);
       alert("Failed to create event. Please try again later.");
     }
+
+    alert("All data has been added successfully.");
+    console.log("All data uploaded");
+
+    // Reset form fields after successful submission
+    setEventTitle('');
+    setCategory('');
+    setConvenorName('');
+    setConvenorDesignation('');
+    setMailId('');
+    setMobileNumber('');
+    setFromDate('');
+    setToDate('');
+    setDuration('');
+    setFinancialSupportOthers('');
+    setFinancialSupportSRMIST('');
+    setEstimatedBudget('');
   };
 
   return (
@@ -177,7 +207,7 @@ export default function EventForm() {
                 type="date"
                 id="from_date"
                 className="border p-2 rounded"
-                value={fromData}
+                value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
                 required
               />
