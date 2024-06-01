@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/database';
 import { getServerSession } from "next-auth"
+import { confirmationBody } from '@/lib/emailtemplates';
+
+import emailsender from '@/emails';
 
 
 // GET All Proposals
@@ -128,9 +131,37 @@ export async function POST(req: NextRequest) {
                         estimatedBudget: body.estimatedBudget,
                     }
                 })
-                console.log("added data as follows")
-                console.log(eventadded)
-                return NextResponse.json({ messgae: "Added event successfully" }, { status: 200 })
+
+                const text = confirmationBody({
+                    category: body.category,
+                    eventTitle: body.eventTitle,
+                    convenorName: body.convenorName,
+                    convenorDesignation: body.convenorDesignation,
+                    mailId: body.mailId,
+                    mobileNumber: body.mobileNumber,
+                    proposedPeriod: body.proposedPeriod,
+                    duration: body.duration,
+                    financialSupportOthers: body.financialSupportOthers,
+                    financialSupportSRMIST: body.financialSupportSRMIST,
+                    estimatedBudget: body.estimatedBudget
+                })
+
+                if (eventadded) {
+                    const emailResponse = await emailsender({ receiverEmail: body.mailId, subject: "Confirmation for your proposal submitted at ctech", text: text });
+                    
+                        return NextResponse.json({
+                            messgae: "Added event successfully",
+                            event: true,
+                            email: true
+                        }, { status: 200 })
+                }
+
+                else {
+                    console.log("added data as follows")
+                    console.log(eventadded)
+                    return NextResponse.json({ messgae: "Something went wrong in processing the request" }, { status: 200 })
+
+                }
             }
         } catch (error) {
             return NextResponse.json({ message: "Event could not be added , please error while acessing database " }, { status: 400 })

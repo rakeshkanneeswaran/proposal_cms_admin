@@ -13,7 +13,7 @@ const auth = nodemailer.createTransport({
 });
 
 
-export default function emailsender({ receiverEmail, subject, text }: { receiverEmail: string, subject: string, text: string }) {
+export default async function emailsender({ receiverEmail, subject, text }: { receiverEmail: string, subject: string, text: string }) {
 
     const receiver = {
         from: "ctecheventconnect@gmail.com",
@@ -25,11 +25,19 @@ export default function emailsender({ receiverEmail, subject, text }: { receiver
     console.log("sending email to the receiver: " + receiver)
 
     auth.sendMail(receiver, (error: any, emailResponse: any) => {
-        if (error)
+        if (error) {
             throw error;
+        }
         console.log("success!");
+        console.log("email sent to " + receiver)
 
     });
+
+    return "success!";
+
+
+
+
 }
 
 
