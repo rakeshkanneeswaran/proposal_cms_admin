@@ -98,9 +98,9 @@ export default function Excelpage() {
             <div className='py-6'>
 
             </div>
-           <Appbarexcel onClick = {async ()=>{
-          await signOut({ callbackUrl: '/signin' })
-        }} ></Appbarexcel>
+            <Appbarexcel onClick={async () => {
+                await signOut({ callbackUrl: '/signin' })
+            }} ></Appbarexcel>
             <div className='py-16'></div>
 
             <div className='flex flex-col items-center'>

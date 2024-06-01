@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
+import emailsender from "@/emails";
+const confirmationSubject = "Confirmation for your proposal submitted at ctech";
+
 import {
   Card,
   CardContent,
@@ -44,7 +47,7 @@ export default function EventForm() {
   // State management as in the initial form
   const [eventTitle, setEventTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [fromData,setFromDate] = useState('');
+  const [fromData, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [convenorName, setConvenorName] = useState('');
   const [convenorDesignation, setConvenorDesignation] = useState('');
@@ -55,6 +58,20 @@ export default function EventForm() {
   const [financialSupportOthers, setFinancialSupportOthers] = useState("");
   const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
   const [estimatedBudget, setEstimatedBudget] = useState('');
+  const confirmationBody = `
+        This is to confirm that your proposal has been approved with the following details:
+        - Event Title: ${eventTitle}
+        - Category: ${category}
+        - Convenor Name: ${convenorName}
+        - Convenor Designation: ${convenorDesignation}
+        - Email: ${mailId}
+        - Mobile Number: ${mobileNumber}
+        - Proposed Period: ${proposedPeriod}
+        - Duration: ${duration} days
+        - Financial Support (Others): ${financialSupportOthers}
+        - Financial Support (SRMIST): ${financialSupportSRMIST}
+        - Estimated Budget: ${estimatedBudget}
+      `;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -72,13 +89,23 @@ export default function EventForm() {
         convenorDesignation,
         mailId,
         mobileNumber,
-        proposedPeriod : `${fromData} - ${toDate}`,
+        proposedPeriod: `${fromData} - ${toDate}`,
         duration,
         financialSupportOthers,
         financialSupportSRMIST,
         estimatedBudget,
         username
       });
+
+
+      
+      emailsender({
+        subject: confirmationSubject,
+        text: confirmationBody,
+        receiverEmail: mailId,
+      });
+
+
 
       console.log("Event created successfully:", result.data);
       alert("Event submitted successfully!");
