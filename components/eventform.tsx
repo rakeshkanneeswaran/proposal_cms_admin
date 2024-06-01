@@ -113,6 +113,7 @@ export default function EventForm() {
 
         if (sendingEmailResult.status === 200) {
           console.log("Email sent to applicant with email: " + mailId);
+          alert("Event submitted successfully, and email sent to applicant.");
         } else {
           console.log("Email not sent to applicant with email: " + mailId);
           alert("Event submitted successfully, but email not sent to applicant.");
