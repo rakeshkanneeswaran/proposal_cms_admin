@@ -26,7 +26,7 @@ export default function EventForm() {
 
   const proposedPeriod = `${fromDate} - ${toDate}`;
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (status === "unauthenticated") {
@@ -233,7 +233,7 @@ export default function EventForm() {
                 type="number"
                 id="duration"
                 className="border p-2 rounded"
-                placeholder="Enter Number of Days"
+                placeholder="Enter Duration in days"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
                 required
@@ -244,10 +244,10 @@ export default function EventForm() {
             <div className="flex flex-col space-y-1.5">
               <label htmlFor="financial_support_others" className="font-medium">Financial Support (Others)</label>
               <input
-                type="number"
+                type="text"
                 id="financial_support_others"
                 className="border p-2 rounded"
-                placeholder="Enter other Financial Support"
+                placeholder="Enter Financial Support (Others)"
                 value={financialSupportOthers}
                 onChange={(e) => setFinancialSupportOthers(e.target.value)}
                 required
@@ -258,10 +258,10 @@ export default function EventForm() {
             <div className="flex flex-col space-y-1.5">
               <label htmlFor="financial_support_srmist" className="font-medium">Financial Support (SRMIST)</label>
               <input
-                type="number"
+                type="text"
                 id="financial_support_srmist"
                 className="border p-2 rounded"
-                placeholder="Enter SRMIST Financial Support"
+                placeholder="Enter Financial Support (SRMIST)"
                 value={financialSupportSRMIST}
                 onChange={(e) => setFinancialSupportSRMIST(e.target.value)}
                 required
@@ -282,7 +282,11 @@ export default function EventForm() {
               />
             </div>
           </div>
-          <button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded">Submit</button>
+
+          {/* Submit Button */}
+          <div className="mt-4 flex justify-end">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+          </div>
         </form>
       </div>
     </div>

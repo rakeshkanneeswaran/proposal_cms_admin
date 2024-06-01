@@ -107,6 +107,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
+    console.log(body)
     const session = await getServerSession();
     if (session?.user?.name == body.username) {
         try {
