@@ -6,6 +6,7 @@ import { signOut } from 'next-auth/react';
 
 import { Appbarexcel } from '@/components/appexceldashboard';
 import { useSession } from 'next-auth/react'
+const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 interface Session {
     status: 'authenticated' | 'unauthenticated' | 'loading';
 }
@@ -74,7 +75,28 @@ export default function Excelpage() {
                     estimatedBudget: JSON.stringify(userData[i].estimatedBudget),
                     username
                 });
-                console.log(result.data);
+                const confirmationBody = `
+        This is to confirm that your proposal has been approved with the following details:
+        - Event Title: ${userData[i].eventTitle}
+        - Category: ${userData[i].category}
+        - Convenor Name: ${userData[i].convenorName}
+        - Convenor Designation: ${userData[i].convenorDesignation}
+        - Email: ${userData[i].mailId}
+        - Mobile Number: ${userData[i].mobileNumber}
+        - Proposed Period: ${userData[i].proposedPeriod}
+        - Duration: ${JSON.stringify(userData[i].duration)} days
+        - Financial Support (Others): ${JSON.stringify(userData[i].financialSupportOthers)}
+        - Financial Support (SRMIST): ${JSON.stringify(userData[i].financialSupportSRMIST)}
+        - Estimated Budget: ${JSON.stringify(userData[i].estimatedBudget)}
+      `;
+                const sendingEmailResult = await axios.post('/api/emailerapi', {
+                    subject: confirmationSubject,
+                    text: confirmationBody,
+                    receiverEmail: userData[i].mailId
+
+                });
+                console.log("email sent to appicant with email: " + userData[i].mailId)
+                "console.log(result.data);"
 
                 if (result.data.messgae === "Validation error") {
                     console.error("Validation error:", result.data.message);

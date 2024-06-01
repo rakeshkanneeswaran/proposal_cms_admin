@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
 import { DatePickerWithRange } from "./DateRange";
+import { text } from "stream/consumers";
 
 export default function EventForm() {
   const { data: session, status } = useSession();
@@ -97,18 +98,24 @@ export default function EventForm() {
         username
       });
 
-
-      
-      emailsender({
+      const sendingEmailResult = await axios.post('/api/emailerapi', {
         subject: confirmationSubject,
         text: confirmationBody,
-        receiverEmail: mailId,
+        receiverEmail: mailId
+
       });
+
+
+
+
+
 
 
 
       console.log("Event created successfully:", result.data);
       alert("Event submitted successfully!");
+      alert("Email sent successfully to applicant!")
+
 
       // Reset form fields after successful submission
       setEventTitle('');
