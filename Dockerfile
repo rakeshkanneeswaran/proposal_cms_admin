@@ -6,6 +6,9 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if available) to the working directory
 COPY package.json package-lock.json ./
 
+# Copy the database directory before running npm install
+COPY database ./database
+
 # Install dependencies
 RUN npm install
 
