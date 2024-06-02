@@ -176,10 +176,11 @@ export async function DELETE(request: NextRequest) {
                     where: { id: parseInt(id) }
                 })
                 console.log(result)
-                return NextResponse.json({ messgae: "Delete event successfully" })
+                return NextResponse.json({ messgae: "Delete event successfully" } , {status : 200})
             }
         } catch (error) {
             console.log(error)
+            return NextResponse.json({ messgae: "not able to delete the event" } , {status : 500})
         }
     }
 }

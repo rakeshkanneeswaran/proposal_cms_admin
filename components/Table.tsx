@@ -41,149 +41,154 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Result } from "postcss";
+import { AlertTriangle } from "lucide-react";
 
 export type Event = {
   id: string;
   eventTitle: string;
   mailId: string;
   estimatedBudget: number;
-  convenorName:string
+  convenorName: string;
 };
-
-// Table columns for events
-export const eventColumns: ColumnDef<Event>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-
-
-  {
-    accessorKey: "eventTitle",
-    header: "eventTitle",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("eventTitle")}</div>,
-  },
-
-  {
-    accessorKey: "convenorName",
-    header: "convenorName",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("convenorName")}</div>,
-  },
-
-
-
-  {
-    accessorKey: "mailId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          mailId
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("mailId")}</div>,
-  },
-
-
-  {
-    accessorKey: "estimatedBudget",
-    header: () => <div className="text-right">Estimated Finance</div>,
-    cell: ({ row }) => {
-      const finance = parseFloat(row.getValue("estimatedBudget"));
-
-      // Format the amount as currency
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "INR",
-      }).format(finance);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-
-
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const event = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(event.id)}
-            >
-              Copy event ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
 
 export default function EventTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const[propsals , setProposal] = useState([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [proposals, setProposal] = useState<Event[]>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   useEffect(() => {
     // Fetch events data when component mounts
-
-
-    axios.get('/api/proposal')
-
-        .then(response => {
-          setProposal(response.data.proposal);
-          console.log(response.data.proposal)
-        })
-        .catch(error => {
-            console.error('Error fetching events:', error);
-        });
+    axios
+      .get("/api/proposal")
+      .then((response) => {
+        setProposal(response.data.proposal);
+        console.log(response.data.proposal);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
 
     // Redirect based on session status
+  }, []);
 
-},[] );
+  const eventColumns: ColumnDef<Event>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "eventTitle",
+      header: "eventTitle",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("eventTitle")}</div>,
+    },
+    {
+      accessorKey: "convenorName",
+      header: "convenorName",
+      cell: ({ row }) => <div className="capitalize">{row.getValue("convenorName")}</div>,
+    },
+    {
+      accessorKey: "mailId",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            mailId
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("mailId")}</div>,
+    },
+    {
+      accessorKey: "estimatedBudget",
+      header: () => <div className="text-right">Estimated Finance</div>,
+      cell: ({ row }) => {
+        const finance = parseFloat(row.getValue("estimatedBudget"));
+
+        // Format the amount as currency
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "INR",
+        }).format(finance);
+
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const event = row.original;
+
+        const handleDelete = async () => {
+          try {
+            console.log(event.id);
+          const result =  await axios.delete(`/api/proposal?id=${event.id}`);
+          if (result.status == 200) {
+            alert("event deleted successfully")
+          }
+          else if (result.status == 500) {
+            alert("event failed to delete")
+          }
+    
+            setProposal((prev) => prev.filter((proposal) => proposal.id !== event.id));
+            console.log(`Event with ID ${event.id} deleted successfully.`);
+          } catch (error) {
+            console.error(`Error deleting event with ID ${event.id}:`, error);
+          }
+        };
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(event.id)}
+              >
+                Copy event ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View details</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleDelete}>Delete event</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
-    data: propsals,
+    data: proposals,
     columns: eventColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -266,20 +271,14 @@ export default function EventTable() {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={eventColumns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={eventColumns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
