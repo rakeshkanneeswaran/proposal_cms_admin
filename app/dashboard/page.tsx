@@ -4,6 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { signOut } from "next-auth/react";
 import axios from "axios";
 import { Appbardashboard } from "@/components/appbardashboard";
 import EventTable from "@/components/Table";
@@ -111,7 +112,7 @@ export default function EventForm() {
     return (
 
         <div>
-            <Appbardashboard></Appbardashboard>
+            <Appbardashboard onClick= {signOut} ></Appbardashboard>
 
 
             <div className="flex md:flex-row md:justify-between  flex-col px-5 py-36">
