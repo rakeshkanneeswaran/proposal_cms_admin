@@ -68,7 +68,7 @@ export default function LoginForm() {
               </span>{' '}
               <span> In-House Proposal Management</span>
               <p className='text-xl font-normal pt-3'>
-                Discover a powerful tool for proposal management created by the Department of Computing Technologies (CTech) in collaboration with talented students from the School of Computing at SRM University. This innovative platform, known as SRM Event Connect, simplifies and enhances the proposal management process with its intuitive design and advanced features. Ideal for organizing events, projects, and initiatives, SRM Event Connect streamlines proposal creation, submission, and review.
+              A powerful tool for proposal management created by the Department of Computing Technologies (CTech). This Event Connect platform simplifies and enhances the proposal management process which streamlines proposal creation, submission, and review.
               </p>
             </h1>
           </div>
