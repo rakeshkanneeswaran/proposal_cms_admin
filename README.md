@@ -1,5 +1,3 @@
-Sure! Here's a `README.md` file and a short description for your project:
-
 ### README.md
 
 ```markdown
@@ -23,15 +21,15 @@ SRM Event Connect is a web application designed for the Department of Computing 
 - **Database:** PostgreSQL with Prisma ORM
 - **Authentication:** NextAuth
 - **Email Service:** Nodemailer
-- **Other Libraries:** Axios, XLSX, Radix UI
+- **Other Libraries:** Axios, XLSX
 
 ## Installation
 
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/srmeventconnect.git
-   cd srmeventconnect
+   git clone https://github.com/rakeshkanneeswaranofficial/proposal_cms_admin.git
+   cd proposal_cms_admin
    ```
 
 2. Install dependencies:
