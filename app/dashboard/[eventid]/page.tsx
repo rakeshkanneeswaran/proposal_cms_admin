@@ -9,10 +9,7 @@ import { signOut } from "next-auth/react";
 
 import { Appbarupdatepage } from "@/components/appbarupdatepage";
 import axios from "axios";
-import { Appbardashboard } from "@/components/appbardashboard";
-import EventTable from "@/components/Table";
-import { Table } from "@/components/ui/table";
-const confirmationSubject = "Confirmation for your proposal submitted at ctech";
+
 
 
 export default function Page({ params }: {
@@ -35,6 +32,7 @@ export default function Page({ params }: {
     const [financialSupportOthers, setFinancialSupportOthers] = useState("");
     const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
     const [estimatedBudget, setEstimatedBudget] = useState('');
+    const router  = useRouter()
     async function getEventData() {
         const result = await axios.get(`/api/proposal?id=${params.eventid}`);
         console.log(result.data);
@@ -89,6 +87,7 @@ export default function Page({ params }: {
 
             if (response.status == 200) {
                 alert("Event Updated Successfully")
+                router.push("/dashboard")
 
             }
             else {
