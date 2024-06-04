@@ -36,7 +36,7 @@ export default function LoginForm() {
       const res = await signIn("credentials", {
         username,
         password,
-        redirect: false,
+        redirect: true,
         callbackUrl: "/dashboard"
       });
 
