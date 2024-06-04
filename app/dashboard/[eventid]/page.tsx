@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { signOut } from "next-auth/react";
+
+import { Appbarupdatepage } from "@/components/appbarupdatepage";
 import axios from "axios";
 import { Appbardashboard } from "@/components/appbardashboard";
 import EventTable from "@/components/Table";
@@ -13,7 +15,7 @@ import { Table } from "@/components/ui/table";
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 
 
-export default function page({ params }: {
+export default function Page({ params }: {
     params: {
         eventid: string
     }
@@ -103,6 +105,10 @@ export default function page({ params }: {
 
     return (
         <div>
+            <div>
+                <Appbarupdatepage onClick={signOut}></Appbarupdatepage>
+            </div>
+            <div className='py-16'></div>
             <div className="flex justify-center items-center min-h-screen p-4">
                 <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
                     <h2 className="text-2xl font-bold mb-4">Update Your Event</h2>
