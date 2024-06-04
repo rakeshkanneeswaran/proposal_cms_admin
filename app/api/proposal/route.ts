@@ -230,7 +230,7 @@ export async function PUT(request: NextRequest) {
                     }
                 })
                 console.log(result)
-                return NextResponse.json({ messgae: "Delete event successfully" })
+                return NextResponse.json({ messgae: "Update event successfully" },{status : 200})
             }
         } catch (error) {
             console.log(error)

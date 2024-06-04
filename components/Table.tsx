@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from 'next/navigation'
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -53,6 +54,7 @@ export type Event = {
 };
 
 export default function EventTable() {
+  const router = useRouter()
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [proposals, setProposal] = useState<Event[]>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -146,16 +148,23 @@ export default function EventTable() {
         const handleDelete = async () => {
           try {
             console.log(event.id);
-          const result =  await axios.delete(`/api/proposal?id=${event.id}`);
-          if (result.status == 200) {
-            alert("event deleted successfully")
-          }
-          else if (result.status == 500) {
-            alert("event failed to delete")
-          }
-    
+            const result = await axios.delete(`/api/proposal?id=${event.id}`);
+            if (result.status == 200) {
+              alert("event deleted successfully")
+            }
+            else if (result.status == 500) {
+              alert("event failed to delete")
+            }
+
             setProposal((prev) => prev.filter((proposal) => proposal.id !== event.id));
             console.log(`Event with ID ${event.id} deleted successfully.`);
+          } catch (error) {
+            console.error(`Error deleting event with ID ${event.id}:`, error);
+          }
+        };
+        const handleUpdate = async () => {
+          try {
+            router.push(`/dashboard/${event.id}`)
           } catch (error) {
             console.error(`Error deleting event with ID ${event.id}:`, error);
           }
@@ -180,6 +189,8 @@ export default function EventTable() {
               <DropdownMenuItem>View details</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleDelete}>Delete event</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleUpdate}>Update Event</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -253,9 +264,9 @@ export default function EventTable() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
