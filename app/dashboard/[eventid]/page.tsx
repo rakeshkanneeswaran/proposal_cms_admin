@@ -108,8 +108,8 @@ export default function Page({ params }: {
                 <Appbarupdatepage onClick={signOut}></Appbarupdatepage>
             </div>
             <div className='py-16'></div>
-            <div className="flex justify-center items-center min-h-screen p-4">
-                <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
+            <div className="flex justify-center items-center min-h-screen p-4 ">
+                <div className="w-full max-w-2xl bg-white p-8 rounded-lg  shadow-2xl">
                     <h2 className="text-2xl font-bold mb-4">Update Your Event</h2>
                     <p className="mb-4">Update your event by clicking update button .</p>
                     <form onSubmit={handleSubmit}>
