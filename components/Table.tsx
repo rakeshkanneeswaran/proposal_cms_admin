@@ -179,14 +179,8 @@ export default function EventTable() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(event.id)}
-              >
-                Copy event ID
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View details</DropdownMenuItem>
+              {/* <DropdownMenuItem>View details</DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleDelete}>Delete event</DropdownMenuItem>
               <DropdownMenuSeparator />
