@@ -80,5 +80,5 @@ export async function GET(request: NextRequest, res: NextResponse) {
         }
     }
 
-    return NextResponse.json({ proposal: allProposals } , {status : 200});
+    return NextResponse.json({ message: "notifications send to applicant" } , {status : 200});
 }
