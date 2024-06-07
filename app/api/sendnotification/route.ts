@@ -94,3 +94,4 @@ export async function GET(request: NextRequest, res: NextResponse) {
 
     return NextResponse.json({ message: "notifications send to applicant" } , {status : 200});
 }
+
