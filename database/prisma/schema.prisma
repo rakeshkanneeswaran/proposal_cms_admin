@@ -19,7 +19,7 @@ model Admin {
 }
 
 model Proposal {
-  id                     Int    @id @default(autoincrement())
+  id                     Int      @id @default(autoincrement())
   category               String
   eventTitle             String
   convenorName           String?
@@ -31,5 +31,7 @@ model Proposal {
   financialSupportOthers String?
   financialSupportSRMIST String?
   estimatedBudget        String?
-   createdAt              DateTime @default(now()) 
+  startDate              String?
+  endDate                String?
+  createdAt              DateTime @default(now())
 }
