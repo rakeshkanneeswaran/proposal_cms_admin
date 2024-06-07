@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 // Next.js API route handler
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest , res : NextResponse) {
     // Configuration for nodemailer
 const sendingEmailResult = await axios.post('/api/emailerapi', {
     subject: "this is corn job subject",
