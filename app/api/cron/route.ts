@@ -9,9 +9,16 @@ import emailSender from '@/emails';
 export async function GET(request: NextRequest, res: NextResponse) {
     // Configuration for nodemailer
 
-    await emailSender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: " this is corn subject", text: "this is cron subject" })
+    const result  = await emailSender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: " this is corn subject", text: "this is cron subject" })
+    if (result.status == "success") {
+        return NextResponse.json({ "message": "email cron working" });
+    }
 
-    return NextResponse.json({ "message": "email cron working" });
+    else {
+        return NextResponse.json({ "message": "email cron not working" });
+    }
+
+   
 
 
 
