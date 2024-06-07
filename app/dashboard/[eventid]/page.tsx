@@ -82,7 +82,10 @@ export default function Page({ params }: {
                 financialSupportOthers,
                 financialSupportSRMIST,
                 estimatedBudget,
-                username
+                username,
+                fromDate,
+                toDate
+    
             });
 
             if (response.status == 200) {

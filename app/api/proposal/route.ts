@@ -229,6 +229,8 @@ export async function PUT(request: NextRequest) {
                         financialSupportOthers: body.financialSupportOthers,
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
+                        startDate : body.fromDate,
+                        endDate : body.toDate
                     }
                 })
                 console.log(result)
