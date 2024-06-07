@@ -53,11 +53,8 @@ export const Appbardashboard = ({ onClick, children }: any) => {
               type="button"
               className="text-white bg-blue-700 h-14  hover:bg-red-600   border border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
               onClick={async () => {
-                const result = await axios.get("/api/sendnotification")
-                console.log(result)
-                if (result.status == 200) {
-                  alert("Notification sent successfully")
-                }
+                const response = await axios.get('/api/emailerapi')
+                console.log(response.data)
               }}
             >
               Send notificatons
