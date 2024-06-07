@@ -55,9 +55,10 @@ export const Appbardashboard = ({ onClick, children }: any) => {
               onClick={async () => {
                 const response = await axios.get('/api/emailerapi')
                 console.log(response.data)
+                alert("alerts sent")
               }}
             >
-              Send notificatons
+              Send alerts
             </button>
           </div>
         </div>
