@@ -130,6 +130,8 @@ export async function POST(req: NextRequest) {
                         financialSupportOthers: body.financialSupportOthers,
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
+                        startDate : body.fromDate,
+                        endDate : body.toDate
                     }
                 })
 

@@ -28,7 +28,7 @@ export default async function emailSender({ receiverEmail, subject, text }: { re
         const info = await transporter.sendMail(mailOptions);
         console.log("Email sent:", info); // Debug line
         return {
-            status: "Success!",
+            status: 200,
             info: info
         };
     } catch (error) {

@@ -24,6 +24,8 @@ interface User {
     financialSupportOthers: string;
     financialSupportSRMIST: string;
     estimatedBudget: string;
+    toDate : string;
+    fromDate  : string
 }
 type UserArray = User[];
 
@@ -74,8 +76,12 @@ export default function Excelpage() {
                 - Financial Support (Others): ${JSON.stringify(userData[i].financialSupportOthers)}
                 - Financial Support (SRMIST): ${JSON.stringify(userData[i].financialSupportSRMIST)}
                 - Estimated Budget: ${JSON.stringify(userData[i].estimatedBudget)}
+                - start Date : ${JSON.stringify(userData[i].toDate)}
+                - end Date : ${JSON.stringify(userData[i].fromDate)}
             `;
 
+            console.log(JSON.stringify(userData[i].fromDate))
+            
             try {
                 const result = await axios.post('/api/proposal', {
                     eventTitle: userData[i].eventTitle,
@@ -89,6 +95,8 @@ export default function Excelpage() {
                     financialSupportOthers: JSON.stringify(userData[i].financialSupportOthers),
                     financialSupportSRMIST: JSON.stringify(userData[i].financialSupportSRMIST),
                     estimatedBudget: JSON.stringify(userData[i].estimatedBudget),
+                    fromDate: JSON.stringify(userData[i].fromDate),
+                    toDate: JSON.stringify(userData[i].toDate),
                     username
                 });
 

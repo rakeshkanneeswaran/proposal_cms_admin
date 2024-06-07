@@ -45,6 +45,8 @@ export default function EventForm() {
     - Financial Support (Others): ${JSON.stringify(financialSupportOthers)}
     - Financial Support (SRMIST): ${JSON.stringify(financialSupportSRMIST)}
     - Estimated Budget: ${JSON.stringify(estimatedBudget)}
+    - start Date : ${JSON.stringify(toDate)}
+    - end Date : ${JSON.stringify(fromDate)}
 `;
 
 
@@ -71,7 +73,9 @@ export default function EventForm() {
                 financialSupportOthers,
                 financialSupportSRMIST,
                 estimatedBudget,
-                username
+                username,
+                fromDate,
+                toDate
             });
 
             if (response.status == 200) {
