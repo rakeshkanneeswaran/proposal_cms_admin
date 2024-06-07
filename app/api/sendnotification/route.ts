@@ -80,5 +80,5 @@ export async function GET(request: NextRequest, res: NextResponse) {
         }
     }
 
-    return NextResponse.json({ proposal: allProposals });
+    return NextResponse.json({ proposal: allProposals } , {status : 200});
 }

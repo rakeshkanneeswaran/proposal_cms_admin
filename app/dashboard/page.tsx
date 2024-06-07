@@ -30,8 +30,6 @@ export default function EventForm() {
     const [estimatedBudget, setEstimatedBudget] = useState('');
 
 
-
-
     let confirmationBody = `
     This is to confirm that your proposal has been approved with the following details:
     - Event Title: ${eventTitle}
@@ -48,9 +46,6 @@ export default function EventForm() {
     - start Date : ${JSON.stringify(toDate)}
     - end Date : ${JSON.stringify(fromDate)}
 `;
-
-
-
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();

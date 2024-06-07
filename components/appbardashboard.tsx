@@ -2,6 +2,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
+import axios from 'axios';
+import { AlertTriangle } from 'lucide-react';
 
 interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
@@ -46,6 +48,18 @@ export const Appbardashboard = ({ onClick, children }: any) => {
               }}
             >
               Upload Excel sheet
+            </button>
+            <button
+              type="button"
+              className="text-white bg-blue-700 h-14  hover:bg-red-600   border border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+              onClick={async () => {
+                const result = await axios.get("/api/sendnotification")
+                if (result.status == 200) {
+                  alert("Notification sent successfully")
+                }
+              }}
+            >
+              Send notificatons
             </button>
           </div>
         </div>
