@@ -1,7 +1,19 @@
+import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from 'next/server';
 import emailSender from '@/emails';
 import prisma from '@/database';
 import { addDays, isSameDay, parseISO } from 'date-fns';
+
+const transporter = nodemailer.createTransport({
+    port: 465,
+    host: "smtp.gmail.com",
+    auth: {
+        user: process.env.NDOEMAILER_USERNAME,
+        pass: process.env.NDOEMAILER_PASSWORD
+    },
+    secure: true,
+    tls: { rejectUnauthorized: false }
+});
 
 // Next.js API route handler
 export async function GET(request: NextRequest, res: NextResponse) {
