@@ -1,45 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
-import nodemailer from "nodemailer";
-
+// Configuration for nodemailer
 const transporter = nodemailer.createTransport({
     port: 465,
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     auth: {
         user: process.env.NDOEMAILER_USERNAME,
-        pass: process.env.NDOEMAILER_PASSWORD
+        pass: process.env.NDOEMAILER_PASSWORD,
     },
     secure: true,
-    tls: { rejectUnauthorized: false }
+    tls: { rejectUnauthorized: false },
 });
 
-export default async function emailSender({ receiverEmail, subject, text }: { receiverEmail: string, subject: string, text: string }) {
+// Email sending function
+async function sendEmail({ receiverEmail, subject, text }: { receiverEmail: string; subject: string; text: string }) {
     const mailOptions = {
-        from: "ctecheventconnect@gmail.com",
+        from: 'ctecheventconnect@gmail.com',
         to: receiverEmail,
         subject: subject,
         text: text,
-        html: `<p>${text}</p>`
+        html: `<p>${text}</p>`,
     };
 
     try {
         await transporter.verify();
-        console.log("Server is ready to take our messages"); // Debug line
+        console.log('Server is ready to take our messages');
         const info = await transporter.sendMail(mailOptions);
-        console.log("Email sent:", info); // Debug line
+        console.log('Email sent:', info);
         return {
-            status: "Success!",
-            info: info
+            status: 'Success!',
+            info: info,
         };
     } catch (error) {
-        console.error("Email sending error:", error); // Detailed error logging
-        throw new Error("Failed to send email");
+        console.error('Email sending error:', error);
+        throw new Error('Failed to send email');
+    }
+}
+
+// Next.js API route handler
+export async function GET(request: NextRequest) {
+    try {
+        await sendEmail({ receiverEmail: 'rakikanneeswaran', subject: 'This is corn job', text: 'This is corn job text' });
+        return NextResponse.json({ message: 'Message sent successfully' });
+    } catch (error) {
+        return NextResponse.json({ message: 'Failed to send message'}, { status: 500 });
     }
 }
 
 
-export async function GET(request: NextRequest) {
 
-    await emailSender({ receiverEmail: "rakikanneeswaran", subject: "this is corn job ", text: " this is corn job text " })
-    return NextResponse.json({ "message": "message send successfully" });
-}
