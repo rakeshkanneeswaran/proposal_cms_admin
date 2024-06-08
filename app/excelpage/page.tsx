@@ -1,13 +1,14 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
-import * as XLSX from "xlsx"
+import * as XLSX from "xlsx";
 import { signOut } from 'next-auth/react';
-
 import { Appbarexcel } from '@/components/appexceldashboard';
-import { useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react';
+
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
+
 interface Session {
     status: 'authenticated' | 'unauthenticated' | 'loading';
 }
@@ -19,14 +20,15 @@ interface User {
     convenorDesignation: string;
     mailId: string;
     mobileNumber: string;
-    proposedPeriod: string;  // Assuming `${fromDate} - ${toDate}` will be a string
+    proposedPeriod: string;
     duration: string;
     financialSupportOthers: string;
     financialSupportSRMIST: string;
     estimatedBudget: string;
-    toDate : string;
-    fromDate  : string
+    toDate: number; // Change toDate and fromDate to number type for Excel serial date numbers
+    fromDate: number;
 }
+
 type UserArray = User[];
 
 export default function Excelpage() {
@@ -34,6 +36,22 @@ export default function Excelpage() {
     const [userData, setUserData] = useState<UserArray | null>(null);
     const { data: session, status } = useSession();
     const username = session?.user?.name;
+
+    const excelSerialToDate = (serial: number) => {
+        const MS_PER_DAY = 86400000; // milliseconds per day
+        const epoch = new Date(1899, 11, 30); // Excel epoch (December 30, 1899)
+
+        const daysSinceEpoch = Math.floor(serial);
+        const msForFractionalDay = Math.round((serial % 1) * MS_PER_DAY);
+        const totalMsSinceEpoch = daysSinceEpoch * MS_PER_DAY + msForFractionalDay;
+
+        const date = new Date(epoch.getTime() + totalMsSinceEpoch);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -53,7 +71,7 @@ export default function Excelpage() {
         } else {
             console.error("No file selected");
         }
-    }
+    };
 
     const handleUpload = async () => {
         if (!userData) {
@@ -63,6 +81,9 @@ export default function Excelpage() {
         }
 
         for (let i = 0; i < userData.length; i++) {
+            const fromDate = excelSerialToDate(userData[i].fromDate);
+            const toDate = excelSerialToDate(userData[i].toDate);
+
             const confirmationBody = `
                 This is to confirm that your proposal has been approved with the following details:
                 - Event Title: ${userData[i].eventTitle}
@@ -76,12 +97,10 @@ export default function Excelpage() {
                 - Financial Support (Others): ${JSON.stringify(userData[i].financialSupportOthers)}
                 - Financial Support (SRMIST): ${JSON.stringify(userData[i].financialSupportSRMIST)}
                 - Estimated Budget: ${JSON.stringify(userData[i].estimatedBudget)}
-                - start Date : ${JSON.stringify(userData[i].toDate)}
-                - end Date : ${JSON.stringify(userData[i].fromDate)}
+                - Start Date: ${fromDate}
+                - End Date: ${toDate}
             `;
 
-            console.log(JSON.stringify(userData[i].fromDate))
-            
             try {
                 const result = await axios.post('/api/proposal', {
                     eventTitle: userData[i].eventTitle,
@@ -95,8 +114,8 @@ export default function Excelpage() {
                     financialSupportOthers: JSON.stringify(userData[i].financialSupportOthers),
                     financialSupportSRMIST: JSON.stringify(userData[i].financialSupportSRMIST),
                     estimatedBudget: JSON.stringify(userData[i].estimatedBudget),
-                    fromDate: JSON.stringify(userData[i].fromDate),
-                    toDate: JSON.stringify(userData[i].toDate),
+                    fromDate,
+                    toDate,
                     username
                 });
 
@@ -124,7 +143,7 @@ export default function Excelpage() {
         }
         alert("All data has been added successfully.");
         console.log("All data uploaded");
-    }
+    };
 
     return (
         <div>
