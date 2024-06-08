@@ -125,7 +125,7 @@ export default function Page() {
     return (
         <div className="min-h-screen bg-gradient-to-r from-purple-50 to-indigo-100 p-8">
 <Appbarcalander></Appbarcalander>
-            <div className="container mx-auto">
+            <div className="container mx-auto p-20">
                 {renderTable('Proposals (July to June)', proposalsJulyToJune)}
                 {renderTable('Proposals (January to December)', proposalsJanuaryToDecember)}
                 {Object.entries(monthlyProposals).map(([month, proposals]) => (
