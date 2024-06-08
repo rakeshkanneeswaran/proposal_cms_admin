@@ -2,8 +2,10 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { Appbar } from '@/components/appbar';
+import srmlogo from "/srmuniversity.jpeg"
 
 export default function LoginForm() {
   const router = useRouter();
@@ -55,18 +57,20 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="h-screen">
+<div className="h-screen" style={{ backgroundImage: `url(/tech_park.jpeg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className='pb-32'>
         <Appbar></Appbar>
       </div>
+
+     
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto flex flex-wrap items-center">
           <div className="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
-            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight bg-gray-100 p-4 rounded-lg text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-400">
                 Department of Computing Technologies
               </span>{' '}
-              <span> In-House Proposal Management</span>
+              <span > In-House Proposal Management</span>
               <p className='text-xl font-normal pt-3'>
               A powerful tool for proposal management created by the Department of Computing Technologies (CTech). This Event Connect platform simplifies and enhances the proposal management process which streamlines proposal creation, submission, and review.
               </p>
@@ -120,6 +124,7 @@ export default function LoginForm() {
           </div>
         </div>
       </section>
+      
     </div>
   );
 }

@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Appbarcalander } from '@/components/appbarcalander';
+import { signOut } from 'next-auth/react';
+
 
 interface Proposal {
     id: number;
@@ -121,6 +124,7 @@ export default function Page() {
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-purple-50 to-indigo-100 p-8">
+<Appbarcalander></Appbarcalander>
             <div className="container mx-auto">
                 {renderTable('Proposals (July to June)', proposalsJulyToJune)}
                 {renderTable('Proposals (January to December)', proposalsJanuaryToDecember)}

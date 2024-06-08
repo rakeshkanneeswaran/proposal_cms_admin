@@ -8,7 +8,6 @@ import { signOut } from "next-auth/react";
 import axios from "axios";
 import { Appbardashboard } from "@/components/appbardashboard";
 import EventTable from "@/components/Table";
-import { Table } from "@/components/ui/table";
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 
 export default function EventForm() {
@@ -110,7 +109,7 @@ export default function EventForm() {
 
     return (
 
-        <div>
+        <div className="bg-gradient-to-r from-purple-50 to-blue-300 ">
             <Appbardashboard onClick= {signOut} ></Appbardashboard>
 
 
@@ -295,7 +294,7 @@ export default function EventForm() {
                         </form>
                     </div>
                 </div>
-                <div>
+                <div >
                     <EventTable></EventTable>
                 </div>
             </div>
