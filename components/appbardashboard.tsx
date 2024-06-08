@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import axios from 'axios';
 
 interface Session {
@@ -31,7 +32,9 @@ export const Appbardashboard = ({ onClick, children }: any) => {
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-red-600 border border-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-            onClick={onClick}
+            onClick={()=>{
+              signOut({callbackUrl : "/signin"})
+            }}
           >
             Logout
           </button>

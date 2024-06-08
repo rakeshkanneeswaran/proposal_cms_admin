@@ -110,7 +110,7 @@ export default function EventForm() {
     return (
 
         <div className="bg-gradient-to-r from-purple-50 to-blue-300 ">
-            <Appbardashboard onClick={signOut({callbackUrl : "/signin"})} ></Appbardashboard>
+            <Appbardashboard  ></Appbardashboard>
 
 
             <div className="flex md:flex-row md:justify-between  flex-col px-5 py-36">
