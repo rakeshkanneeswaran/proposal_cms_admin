@@ -27,7 +27,7 @@ export const authOptions = {
                         emailsender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: "Sign-in Detected on Ctechevent Connect", text: "If you haven't signed in, please contact the administrators immediately." });
                         return {
                             id: existingUser.username,
-                            name: existingUser.username
+                            name: existingUser.username,
                         };
                     } 
                     

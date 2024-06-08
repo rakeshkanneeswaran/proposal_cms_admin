@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Appbarcalander } from '@/components/appbarcalander';
-import { signOut } from 'next-auth/react';
+
+
 
 
 interface Proposal {
@@ -72,7 +73,7 @@ export default function Page() {
     const renderTable = (title: string, proposals: Proposal[]) => {
         const isScrollable = proposals.length > 5;
         return (
-            <div key={title} className="mb-12">
+            <div key={title} className="mb-12 h-96 overflow-y-scroll">
                 <h2 className="text-3xl mb-6 font-semibold text-indigo-600">{title}</h2>
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="min-w-full border border-gray-300">
@@ -124,7 +125,7 @@ export default function Page() {
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-purple-50 to-indigo-100 p-8">
-<Appbarcalander></Appbarcalander>
+            <Appbarcalander></Appbarcalander>
             <div className="container mx-auto p-20">
                 {renderTable('Proposals (July to June)', proposalsJulyToJune)}
                 {renderTable('Proposals (January to December)', proposalsJanuaryToDecember)}

@@ -2,10 +2,10 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import { Appbar } from '@/components/appbar';
-import srmlogo from "/srmuniversity.jpeg"
+
 
 export default function LoginForm() {
   const router = useRouter();
@@ -38,15 +38,15 @@ export default function LoginForm() {
       const res = await signIn("credentials", {
         username,
         password,
-        redirect: true,
+        redirect: false,  // Set redirect to false
         callbackUrl: "/dashboard"
       });
-
+  
       if (res?.status === 401) {
-        alert("Incorrect username or password. Please verify your credentials.");
-      } else {
+        toast.error("Incorrect username or password. Please verify your credentials.");
+      } else if (res?.ok) {
         console.log(res);
-        router.push("/dashboard");
+        router.push("/dashboard");  // Manually redirect if sign-in was successful
       }
     } catch (error) {
       console.error("Login failed:", error);

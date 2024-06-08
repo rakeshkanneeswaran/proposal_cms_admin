@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { signOut } from "next-auth/react";
+import { toast } from 'react-toastify';
 
 import { Appbarupdatepage } from "@/components/appbarupdatepage";
 import axios from "axios";
@@ -32,7 +33,7 @@ export default function Page({ params }: {
     const [financialSupportOthers, setFinancialSupportOthers] = useState("");
     const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
     const [estimatedBudget, setEstimatedBudget] = useState('');
-    const router  = useRouter()
+    const router = useRouter()
     async function getEventData() {
         const result = await axios.get(`/api/proposal?id=${params.eventid}`);
         console.log(result.data);
@@ -51,7 +52,6 @@ export default function Page({ params }: {
         setFinancialSupportSRMIST(proposal.financialSupportSRMIST);
         setEstimatedBudget(proposal.estimatedBudget);
     }
-
     useEffect(() => {
         getEventData();
     }, []);
@@ -85,15 +85,16 @@ export default function Page({ params }: {
                 username,
                 fromDate,
                 toDate
-    
+
             });
 
             if (response.status == 200) {
-                alert("Event Updated Successfully")
+                toast.success("Event Updated Successfully")
                 router.push("/dashboard")
 
             }
             else {
+                toast.error("Failed to update event. Please try again later.")
                 alert("Failed to update event. Please try again later.");
             }
 

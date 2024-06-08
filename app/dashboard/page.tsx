@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { signOut } from "next-auth/react";
 import axios from "axios";
+import { toast } from 'react-toastify';
 import { Appbardashboard } from "@/components/appbardashboard";
 import EventTable from "@/components/Table";
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
@@ -13,8 +14,6 @@ const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 export default function EventForm() {
     const { data: session, status } = useSession();
     const username = session?.user?.name;
-    const router = useRouter();
-
     const [eventTitle, setEventTitle] = useState('');
     const [category, setCategory] = useState('');
     const [fromDate, setFromDate] = useState('');
@@ -82,7 +81,8 @@ export default function EventForm() {
 
                 if (sendingEmailResult.status == 200) {
                     console.log(sendingEmailResult.data)
-                    alert("Event and email processed successfully.");
+
+                    toast.success("Event and email processed successfully.")
                     // Reset form fields
                     setEventTitle('');
                     setCategory('');
@@ -103,14 +103,14 @@ export default function EventForm() {
             }
         } catch (error) {
             console.error("Error submitting form", error);
-            alert("Failed to create event. Please try again later.");
+            toast.error("Failed to create event. Please try again later.")
         }
     };
 
     return (
 
         <div className="bg-gradient-to-r from-purple-50 to-blue-300 ">
-            <Appbardashboard onClick= {signOut} ></Appbardashboard>
+            <Appbardashboard onClick={signOut} ></Appbardashboard>
 
 
             <div className="flex md:flex-row md:justify-between  flex-col px-5 py-36">

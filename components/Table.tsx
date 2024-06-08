@@ -4,6 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify';
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -150,10 +151,10 @@ export default function EventTable() {
             console.log(event.id);
             const result = await axios.delete(`/api/proposal?id=${event.id}`);
             if (result.status == 200) {
-              alert("event deleted successfully")
+              toast.success("event deleted successfully")
             }
             else if (result.status == 500) {
-              alert("event failed to delete")
+              toast.error("event failed to delete")
             }
 
             setProposal((prev) => prev.filter((proposal) => proposal.id !== event.id));

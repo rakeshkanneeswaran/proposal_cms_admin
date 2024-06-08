@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as XLSX from "xlsx";
 import { signOut } from 'next-auth/react';
 import { Appbarexcel } from '@/components/appexceldashboard';
+import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
@@ -133,9 +134,12 @@ export default function Excelpage() {
 
                     if (sendingEmailResult.status === 200) {
                         console.log("Email sent to applicant with email: " + userData[i].mailId);
+                        toast.success("Email sent to applicant with email: " + userData[i].mailId)
+
                     } else {
                         console.log("Email not sent to applicant with email: " + userData[i].mailId);
-                        alert("Event submitted successfully, but email not sent to applicant.");
+                        toast.error("Email not sent to applicant with email: " + userData[i].mailId)
+
                     }
                 } else {
                     console.error("Error: Status code sent by server for accessing database is " + result.status);
@@ -143,7 +147,7 @@ export default function Excelpage() {
                 }
             } catch (error) {
                 console.error("Error uploading data", error);
-                alert("Failed to create event. Please try again later.");
+                toast.error("Failed to create event. Please try again later.")
             }
             setProgress((prevProgress) => ((i + 1) / userData.length) * 100);
         }
@@ -173,18 +177,18 @@ export default function Excelpage() {
                 </div>
 
                 <div className="flex justify-center mb-4">
-                    <input 
-                        type="file" 
-                        accept=".xlsx, .xls" 
+                    <input
+                        type="file"
+                        accept=".xlsx, .xls"
                         onChange={handleFile}
                         className="px-4 py-2 border rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                 </div>
 
                 <div className="flex justify-center mb-8">
-                    <button 
-                        type="button" 
-                        onClick={handleUpload} 
+                    <button
+                        type="button"
+                        onClick={handleUpload}
                         className="px-6 py-2 text-white bg-indigo-600 rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                         Upload Data
