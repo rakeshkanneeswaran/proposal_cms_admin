@@ -34,6 +34,8 @@ type UserArray = User[];
 export default function Excelpage() {
     const [filename, setFileName] = useState("Your file name will appear here");
     const [userData, setUserData] = useState<UserArray | null>(null);
+    const [progress, setProgress] = useState(0);
+    const [processing, setProcessing] = useState(false);
     const { data: session, status } = useSession();
     const username = session?.user?.name;
 
@@ -79,6 +81,9 @@ export default function Excelpage() {
             alert("No data to upload. Please upload an excel sheet in the prescribed format.");
             return;
         }
+
+        setProcessing(true);
+        setProgress(0);
 
         for (let i = 0; i < userData.length; i++) {
             const fromDate = excelSerialToDate(userData[i].fromDate);
@@ -140,38 +145,66 @@ export default function Excelpage() {
                 console.error("Error uploading data", error);
                 alert("Failed to create event. Please try again later.");
             }
+            setProgress((prevProgress) => ((i + 1) / userData.length) * 100);
         }
+
+        setProcessing(false);
         alert("All data has been added successfully.");
         console.log("All data uploaded");
     };
 
     return (
-        <div>
-            <div className='py-6'>
-
-            </div>
+        <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 flex flex-col items-center pt-28">
             <Appbarexcel onClick={async () => {
-                await signOut({ callbackUrl: '/signin' })
-            }} ></Appbarexcel>
-            <div className='py-16'></div>
-
-            <div className='flex flex-col items-center'>
-                <h1 className="mb-4 text-lg md:text-lg font-bold  text-cente uppercase  leading-none tracking-tight text-gray-900  lg:text-xl dark:text-white">
-                    <span className="text-red-600">
-                        By Choosing  your excel file your can directly add the details. please make sure that excel file is present in the prescribed format
-                    </span>{' '}
-                </h1>
-
-
-                <div className="mb-4 text-lg md:text-lg font-bold  text-cente uppercase  leading-none tracking-tight text-gray-900  lg:text-xl dark:text-white">SELECTED FILE: {filename} </div>
-                <div>
-                    <input type="file" accept=".xlsx, .xls" onChange={handleFile} />
+                await signOut({ callbackUrl: '/signin' });
+            }} />
+            <div className="container mx-auto p-8 mt-10 bg-white shadow-lg rounded-lg">
+                <div className="text-center">
+                    <h1 className="mb-4 text-2xl font-bold text-gray-900 uppercase tracking-wide">
+                        Upload Your Excel File
+                    </h1>
+                    <p className="mb-8 text-gray-700">
+                        By choosing your excel file, you can directly add the details. Please make sure that the excel file is in the prescribed format.
+                    </p>
                 </div>
-                <div>
-                    <button type="button" onClick={handleUpload} className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Upload Data</button>
+
+                <div className="mb-8 text-lg font-semibold text-center text-gray-900">
+                    Selected File: <span className="text-blue-600">{filename}</span>
                 </div>
+
+                <div className="flex justify-center mb-4">
+                    <input 
+                        type="file" 
+                        accept=".xlsx, .xls" 
+                        onChange={handleFile}
+                        className="px-4 py-2 border rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                </div>
+
+                <div className="flex justify-center mb-8">
+                    <button 
+                        type="button" 
+                        onClick={handleUpload} 
+                        className="px-6 py-2 text-white bg-indigo-600 rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                        Upload Data
+                    </button>
+                </div>
+
+                {userData && (
+                    <>
+                        <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
+                            <div
+                                className="bg-blue-600 h-4 rounded-full transition-width duration-300"
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                        <div className="text-lg font-medium text-center text-gray-700">
+                            {processing ? "Processing..." : "Done"}
+                        </div>
+                    </>
+                )}
             </div>
-
         </div>
-    )
+    );
 }
