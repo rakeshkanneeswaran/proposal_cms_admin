@@ -2,10 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from 'date-fns';
 import { Appbarcalander } from '@/components/appbarcalander';
-
-
-
 
 interface Proposal {
     id: number;
@@ -27,20 +25,63 @@ interface Proposal {
 
 export default function Page() {
     const [proposals, setProposals] = useState<Proposal[]>([]);
-
-    async function getProposals() {
-        try {
-            const result = await axios.get<{ proposal: Proposal[] }>("/api/proposal");
-            console.log(result.data);
-            setProposals(result.data.proposal);
-        } catch (error) {
-            console.error("Error fetching proposals:", error);
-        }
-    }
+    const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
     useEffect(() => {
+        async function getProposals() {
+            try {
+                const result = await axios.get<{ proposal: Proposal[] }>("/api/proposal");
+                console.log(result.data);
+                setProposals(result.data.proposal);
+            } catch (error) {
+                console.error("Error fetching proposals:", error);
+            }
+        }
+
         getProposals();
-    }, []); // Empty dependency array to run once on mount
+    }, []);
+
+    const daysInMonth = eachDayOfInterval({
+        start: startOfMonth(currentMonth),
+        end: endOfMonth(currentMonth),
+    });
+
+    const proposalsByDate = proposals.reduce((acc: { [key: string]: Proposal[] }, proposal) => {
+        const startDate = format(new Date(proposal.startDate), 'yyyy-MM-dd');
+        if (!acc[startDate]) {
+            acc[startDate] = [];
+        }
+        acc[startDate].push(proposal);
+        return acc;
+    }, {});
+
+    const renderCalendar = () => {
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
+                {daysInMonth.map((day, index) => {
+                    const dayKey = format(day, 'yyyy-MM-dd');
+                    return (
+                        <div key={index} className="border p-2 bg-white shadow rounded">
+                            <div className="font-bold text-blue-600">{format(day, 'd')}</div>
+                            {proposalsByDate[dayKey]?.map(proposal => (
+                                <div key={proposal.id} className="bg-green-200 text-sm p-1 mt-1 rounded">
+                                    {proposal.eventTitle}
+                                </div>
+                            ))}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const previousMonth = () => {
+        setCurrentMonth(subMonths(currentMonth, 1));
+    };
+
+    const nextMonth = () => {
+        setCurrentMonth(addMonths(currentMonth, 1));
+    };
 
     const segregateByPeriod = (proposals: Proposal[], startMonth: number, endMonth: number): Proposal[] => {
         return proposals.filter(proposal => {
@@ -74,11 +115,11 @@ export default function Page() {
         const isScrollable = proposals.length > 5;
         return (
             <div key={title} className="mb-12 h-96 overflow-y-scroll">
-                <h2 className="text-3xl mb-6 font-semibold text-indigo-600">{title}</h2>
+                <h2 className="text-3xl mb-6 font-semibold text-blue-600">{title}</h2>
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="min-w-full border border-gray-300">
                         <thead>
-                            <tr className="bg-indigo-50">
+                            <tr className="bg-blue-50">
                                 <th className="p-3 border border-gray-300">ID</th>
                                 <th className="p-3 border border-gray-300">Category</th>
                                 <th className="p-3 border border-gray-300">Event Title</th>
@@ -98,7 +139,7 @@ export default function Page() {
                         </thead>
                         <tbody className={isScrollable ? 'max-h-64 overflow-y-auto' : ''}>
                             {proposals.map(proposal => (
-                                <tr key={proposal.id} className="even:bg-indigo-50">
+                                <tr key={proposal.id} className="even:bg-blue-50">
                                     <td className="p-3 border border-gray-300">{proposal.id}</td>
                                     <td className="p-3 border border-gray-300">{proposal.category}</td>
                                     <td className="p-3 border border-gray-300">{proposal.eventTitle}</td>
@@ -124,9 +165,16 @@ export default function Page() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-purple-50 to-indigo-100 p-8">
-            <Appbarcalander></Appbarcalander>
-            <div className="container mx-auto p-20">
+        <div className="min-h-screen bg-gradient-to-r from-green-50 to-blue-100 pt-28">
+            <Appbarcalander />
+            <div className="container mx-auto p-4 md:p-20">
+                <div className="flex justify-between mb-4">
+                    <button onClick={previousMonth} className="p-2 bg-blue-500 text-white rounded">Previous</button>
+                    <h2 className="text-2xl font-semibold text-blue-600">{format(currentMonth, 'MMMM yyyy')}</h2>
+                    <button onClick={nextMonth} className="p-2 bg-blue-500 text-white rounded">Next</button>
+                </div>
+                {renderCalendar()}
+                <div className="mt-8"></div> {/* Add space after the calendar */}
                 {renderTable('Proposals (July to June)', proposalsJulyToJune)}
                 {renderTable('Proposals (January to December)', proposalsJanuaryToDecember)}
                 {Object.entries(monthlyProposals).map(([month, proposals]) => (
@@ -137,4 +185,5 @@ export default function Page() {
             </div>
         </div>
     );
+    
 }
