@@ -26,7 +26,7 @@ export default function EventForm() {
     const [financialSupportOthers, setFinancialSupportOthers] = useState("");
     const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
     const [estimatedBudget, setEstimatedBudget] = useState('');
-
+    const [isSubmitting, setIsSubmitting] = useState(false); // New state variable
 
     let confirmationBody = `
     This is to confirm that your proposal has been approved with the following details:
@@ -52,6 +52,8 @@ export default function EventForm() {
             alert("Please sign in first");
             return;
         }
+
+        setIsSubmitting(true); // Set submitting state to true
 
         try {
             const response = await axios.post('/api/proposal', {
@@ -97,24 +99,20 @@ export default function EventForm() {
                     setFinancialSupportSRMIST('');
                     setEstimatedBudget('');
                 }
-
-
-
             }
         } catch (error) {
             console.error("Error submitting form", error);
             toast.error("Failed to create event. Please try again later.")
+        } finally {
+            setIsSubmitting(false); // Reset submitting state to false
         }
     };
 
     return (
-
         <div className="bg-gradient-to-r from-purple-50 to-blue-300 ">
-            <Appbardashboard  ></Appbardashboard>
+            <Appbardashboard></Appbardashboard>
 
-
-            <div className="flex md:flex-row md:justify-between  flex-col px-5 py-36">
-
+            <div className="flex md:flex-row md:justify-between flex-col px-5 py-36">
                 <div className="flex justify-center items-center min-h-screen p-4">
                     <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4">Create Event</h2>
@@ -235,7 +233,7 @@ export default function EventForm() {
 
                                 {/* Duration */}
                                 <div className="flex flex-col space-y-1.5">
-                                    <label htmlFor="duration" className="font-medium">Duration</label>
+                                    <label htmlFor="duration" className="font-medium">Duration (No of Days)</label>
                                     <input
                                         type="text"
                                         id="duration"
@@ -289,12 +287,14 @@ export default function EventForm() {
 
                             {/* Submit Button */}
                             <div className="mt-6">
-                                <button type="submit" className="bg-blue-500 text-white p-2 rounded">Create Event</button>
+                                <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isSubmitting}>
+                                    {isSubmitting ? "Processing..." : "Create Event"}
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div >
+                <div>
                     <EventTable></EventTable>
                 </div>
             </div>
