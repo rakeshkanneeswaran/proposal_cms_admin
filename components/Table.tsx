@@ -43,8 +43,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Result } from "postcss";
-import { AlertTriangle } from "lucide-react";
+import { isatty } from "tty";
 
 export type Event = {
   id: string;
@@ -64,6 +63,7 @@ export default function EventTable() {
 
   useEffect(() => {
     // Fetch events data when component mounts
+    toast.info("Fetching the data please wait...");
     axios
       .get("/api/proposal")
       .then((response) => {
@@ -213,7 +213,7 @@ export default function EventTable() {
   });
 
   return (
-    <div className="w-full bg-white rounded-md shadow-lg p-3">
+    <div className="w-full bg-white rounded-md shadow-lg p-3 border-4 border-black">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter mailIds..."

@@ -3,12 +3,11 @@
 import * as React from "react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
-import { signOut } from "next-auth/react";
-import axios from "axios";
 import { toast } from 'react-toastify';
 import { Appbardashboard } from "@/components/appbardashboard";
 import EventTable from "@/components/Table";
+import axios from "axios";
+
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 
 export default function EventForm() {
@@ -109,12 +108,13 @@ export default function EventForm() {
     };
 
     return (
-        <div className="bg-gradient-to-r from-purple-50 to-blue-300 ">
-            <Appbardashboard></Appbardashboard>
-
-            <div className="flex md:flex-row md:justify-between flex-col px-5 py-36">
-                <div className="flex justify-center items-center min-h-screen p-4">
-                    <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
+        <div className="bg-gradient-to-r from-purple-50 to-blue-300 min-h-screen">
+            <Appbardashboard />
+            <h1 className="text-red-600">hi</h1>
+            <div className="flex md:flex-row flex-col justify-between px-5 py-36">
+             
+                <div className="w-full md:w-1/2 flex justify-center items-start">
+                    <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md border-blue-500 border-4">
                         <h2 className="text-2xl font-bold mb-4">Create Event</h2>
                         <p className="mb-4">Deploy your new event in one-click.</p>
                         <form onSubmit={handleSubmit}>
@@ -294,8 +294,8 @@ export default function EventForm() {
                         </form>
                     </div>
                 </div>
-                <div>
-                    <EventTable></EventTable>
+                <div className="w-full md:w-1/2 flex justify-center items-start">
+                    <EventTable />
                 </div>
             </div>
         </div>

@@ -25,7 +25,6 @@ export async function GET(req: NextRequest) {
     const allProposals = await prisma.proposal.findMany();
     console.log("Printing all proposals");
     console.log(allProposals);
-
     try {
         for (const proposal of allProposals) {
 
@@ -68,7 +67,7 @@ export async function GET(req: NextRequest) {
                     // Send the email
                     try {
                         const result = await emailsender({ subject: "Reminder for your upcoming event", text: emailBody, receiverEmail: proposal.mailId })
-                         console.log(result.status)
+                        console.log(result.status)
                         if (result.status == 200) {
                             console.log(`Reminder email sent to ${proposal.mailId} for event "${proposal.eventTitle}"`);
 
