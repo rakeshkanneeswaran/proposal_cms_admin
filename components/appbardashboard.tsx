@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
@@ -15,6 +15,8 @@ export const Appbardashboard = ({ onClick, children }: any) => {
   const router = useRouter();
   const session: Session = useSession();
   const [isSendingAlerts, setIsSendingAlerts] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (session.status === 'unauthenticated') {
@@ -23,6 +25,18 @@ export const Appbardashboard = ({ onClick, children }: any) => {
       router.push('/dashboard');
     }
   }, [session.status, router, session]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSendAlerts = async () => {
     setIsSendingAlerts(true);
@@ -51,15 +65,59 @@ export const Appbardashboard = ({ onClick, children }: any) => {
         </a>
         <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex space-x-4">
-          <button
-            type="button"
-            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-            onClick={() => {
-              router.push('/excelpage');
-            }}
-          >
-            Upload Excel Sheet
-          </button>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              Advance Tools
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-10">
+                <button
+                  type="button"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    router.push('/excelpage');
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Upload Excel Sheet
+                </button>
+                <button
+                  type="button"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    router.push('/calander');
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Calendar
+                </button>
+                <button
+                  type="button"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    router.push('/upcomming');
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Upcomming Events
+                </button>
+                <button
+                  type="button"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    router.push('/graphs');
+                    setDropdownOpen(false);
+                  }}
+                >
+                  graphs and visualization
+                </button>
+              </div>
+            )}
+          </div>
           <button
             type="button"
             className={`text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ${isSendingAlerts ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -70,15 +128,6 @@ export const Appbardashboard = ({ onClick, children }: any) => {
           </button>
           <button
             type="button"
-            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-            onClick={() => {
-              router.push('/calander');
-            }}
-          >
-            Calendar
-          </button>
-          <button
-            type="button"
             className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             onClick={() => {
               signOut({ callbackUrl: "/signin" });
@@ -86,7 +135,6 @@ export const Appbardashboard = ({ onClick, children }: any) => {
           >
             Logout
           </button>
-          
         </div>
       </div>
     </nav>

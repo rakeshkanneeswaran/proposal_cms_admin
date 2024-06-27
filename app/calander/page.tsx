@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from 'date-fns';
 import { Appbarcalander } from '@/components/appbarcalander';
@@ -22,6 +23,7 @@ interface Proposal {
     endDate: string;
     createdAt: string;
 }
+
 
 export default function Page() {
     const [proposals, setProposals] = useState<Proposal[]>([]);

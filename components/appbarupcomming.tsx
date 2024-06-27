@@ -9,7 +9,7 @@ interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
 }
 
-export const Appbarcalander = () => {
+export const Appbarupcomming = () => {
   const router = useRouter();
   const session: Session = useSession();
 
@@ -17,7 +17,7 @@ export const Appbarcalander = () => {
     if (session.status === 'unauthenticated') {
       router.push('/signin');
     } else {
-      router.push('/calander');
+      router.push('/upcomming');
     }
   }, [session.status, router]);
 
