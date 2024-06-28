@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
 }
 export async function GET(req: NextRequest) {
 
+    const sentemails = [];
     const currentDate = new Date();
     const allProposals = await prisma.proposal.findMany();
     console.log("Printing all proposals");
@@ -70,6 +71,7 @@ export async function GET(req: NextRequest) {
                         console.log(result.status)
                         if (result.status == 200) {
                             console.log(`Reminder email sent to ${proposal.mailId} for event "${proposal.eventTitle}"`);
+                            sentemails.push(proposal.mailId );
 
                         }
                         else {
@@ -85,7 +87,10 @@ export async function GET(req: NextRequest) {
 
             }
         }
-        return NextResponse.json({ messgae: "conformation email sent to the applicant" }, { status: 200 })
+        console.log("sent emails: " + sentemails)
+        return NextResponse.json({ messgae: "conformation email sent to the applicant" ,
+            sentemails : sentemails
+        }, { status: 200 })
     } catch (error) {
         console.log(error)
     }

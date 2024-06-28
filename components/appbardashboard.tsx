@@ -43,7 +43,15 @@ export const Appbardashboard = ({ onClick, children }: any) => {
     toast.info("Please wait while sending Alerts. Process will take some time");
     try {
       const response = await axios.get('/api/emailerapi');
-      console.log(response.data);
+      if (response.data.sentemails) {
+        for (let index = 0; index < response.data.sentemails.length; index++) {
+          const element = response.data.sentemails[index];
+          toast.info(`Alert email sent to ${element}`);
+          console.log(element)
+          
+        }
+      }
+      
       if (response.status == 200) {
         toast.success("Alert email sent successfully");
       } else if (response.status == 500) {
