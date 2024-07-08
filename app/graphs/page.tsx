@@ -177,14 +177,7 @@ export default function GraphsPage() {
                         </div>
                     )}
                 </div>
-                <div>
-                    <h2 className="text-3xl mb-6 font-semibold text-blue-600">Category Distribution</h2>
-                    {categoryChartData && (
-                        <div className="bg-white shadow-md rounded-lg p-4 mb-8">
-                            <Pie data={categoryChartData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
-                        </div>
-                    )}
-                </div>
+                
             </div>
         </div>
     );
