@@ -41,7 +41,7 @@ export const Appbarexcel = ({ onClick, children }: any) => {
                 router.push("/dashboard");
               }}
             >
-              Upload manually
+              Dashboard
             </button>
             <button
               type="button"

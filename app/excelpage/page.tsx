@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { signOut } from 'next-auth/react';
 import { Appbarexcel } from '@/components/appexceldashboard';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";
 
@@ -167,6 +168,15 @@ export default function Excelpage() {
                     <h1 className="mb-4 text-2xl font-bold text-gray-900 uppercase tracking-wide">
                         Upload Your Excel File
                     </h1>
+                    <button
+                        type="button"
+                        className="px-4 py-2 ml-4 text-white bg-green-600 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onClick={() => {
+                            window.location.href = "/prosoaltestfile.xlsx";
+                        }}
+                    >
+                        Download Template
+                    </button>
                     <p className="mb-8 text-gray-700">
                         By choosing your excel file, you can directly add the details. Please make sure that the excel file is in the prescribed format.
                     </p>
