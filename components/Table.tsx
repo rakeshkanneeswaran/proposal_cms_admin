@@ -223,6 +223,14 @@ export default function EventTable() {
           }
           className="max-w-sm"
         />
+        <Input
+          placeholder="Filter convenorName..."
+          value={(table.getColumn("convenorName")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("convenorName")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
