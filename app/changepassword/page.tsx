@@ -1,14 +1,28 @@
 "use client"
 
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Appbarpassword } from '@/components/appbarchangepassword';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+interface Session {
+  status: 'authenticated' | 'unauthenticated' | 'loading';
+}
 
 const ChangePasswordPage = () => {
   const router = useRouter();
   const [newPassword, setNewPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const session: Session = useSession();
+
+  useEffect(() => {
+    if (session.status === 'unauthenticated') {
+      router.push('/signin');
+    } else {
+      router.push('/changepassword');
+    }
+  })
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +39,9 @@ const ChangePasswordPage = () => {
         username: 'ctech', 
         password: newPassword,
       });
+
+      console.log(response)
+      console.log(newPassword)
 
       // Handle response
       if (response.status === 200) {
@@ -43,6 +60,7 @@ const ChangePasswordPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Appbarpassword></Appbarpassword>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-2xl font-semibold mb-6 text-center">Change Password</h1>
         <form onSubmit={handleChangePassword}>
