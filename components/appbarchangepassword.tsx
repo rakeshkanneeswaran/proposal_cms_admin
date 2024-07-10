@@ -13,7 +13,7 @@ export const Appbarpassword = () => {
     if (session.status === 'unauthenticated') {
       router.push('/signin');
     } else {
-      router.push('/changepassword');
+      router.push('/settings');
     }
   }, [session.status, router]);
 

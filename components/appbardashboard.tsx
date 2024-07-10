@@ -143,34 +143,13 @@ export const Appbardashboard = ({ onClick, children }: any) => {
             <button
               type="button"
               className="text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-              onClick={() => setSettingsDropdownOpen(!settingsDropdownOpen)}
+              onClick={() => {
+                router.push("/settings")
+              }}
             >
               Settings
             </button>
-            {settingsDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-10">
-                <button
-                  type="button"
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => {
-                    router.push('/changepassword');
-                    setSettingsDropdownOpen(false);
-                  }}
-                >
-                  Change Password
-                </button>
-                {/* <button
-                  type="button"
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => {
-                    // Add logic for deleting proposals here
-                    setSettingsDropdownOpen(false);
-                  }}
-                >
-                  Delete Proposals
-                </button> */}
-              </div>
-            )}
+            
           </div>
           <button
             type="button"
