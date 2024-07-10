@@ -159,7 +159,7 @@ export const Appbardashboard = ({ onClick, children }: any) => {
                 >
                   Change Password
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onClick={() => {
@@ -168,7 +168,7 @@ export const Appbardashboard = ({ onClick, children }: any) => {
                   }}
                 >
                   Delete Proposals
-                </button>
+                </button> */}
               </div>
             )}
           </div>
