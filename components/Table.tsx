@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import {
   CaretSortIcon,
@@ -30,7 +30,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -43,23 +42,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { isatty } from "tty";
 
 export type Event = {
   id: string;
   eventTitle: string;
   mailId: string;
-  estimatedBudget: number;
   convenorName: string;
+  status: boolean; // Ensure status is a boolean
 };
 
 export default function EventTable() {
-  const router = useRouter()
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [proposals, setProposal] = useState<Event[]>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const router = useRouter();
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [proposals, setProposals] = useState<Event[]>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   useEffect(() => {
     // Fetch events data when component mounts
@@ -67,14 +65,12 @@ export default function EventTable() {
     axios
       .get("/api/proposal")
       .then((response) => {
-        setProposal(response.data.proposal);
+        setProposals(response.data.proposal);
         console.log(response.data.proposal);
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
-
-    // Redirect based on session status
   }, []);
 
   const eventColumns: ColumnDef<Event>[] = [
@@ -102,42 +98,33 @@ export default function EventTable() {
     },
     {
       accessorKey: "eventTitle",
-      header: "eventTitle",
+      header: "Event Title",
       cell: ({ row }) => <div className="capitalize">{row.getValue("eventTitle")}</div>,
     },
     {
       accessorKey: "convenorName",
-      header: "convenorName",
+      header: "Convenor Name",
       cell: ({ row }) => <div className="capitalize">{row.getValue("convenorName")}</div>,
     },
     {
       accessorKey: "mailId",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            mailId
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Mail ID
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => <div className="lowercase">{row.getValue("mailId")}</div>,
     },
     {
-      accessorKey: "estimatedBudget",
-      header: () => <div className="text-right">Estimated Finance</div>,
+      accessorKey: "status",
+      header: "Status",
       cell: ({ row }) => {
-        const finance = parseFloat(row.getValue("estimatedBudget"));
-
-        // Format the amount as currency
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "INR",
-        }).format(finance);
-
-        return <div className="text-right font-medium">{formatted}</div>;
+        const status = row.getValue("status") ? 'Completed' : 'In Progress';
+        return <div className="text-right font-medium text-black">{status}</div>;
       },
     },
     {
@@ -150,24 +137,58 @@ export default function EventTable() {
           try {
             console.log(event.id);
             const result = await axios.delete(`/api/proposal?id=${event.id}`);
-            if (result.status == 200) {
-              toast.success("event deleted successfully")
+            if (result.status === 200) {
+              toast.success("Event deleted successfully");
+              setProposals((prev) => prev.filter((proposal) => proposal.id !== event.id));
+            } else if (result.status === 500) {
+              toast.error("Event failed to delete");
             }
-            else if (result.status == 500) {
-              toast.error("event failed to delete")
-            }
-
-            setProposal((prev) => prev.filter((proposal) => proposal.id !== event.id));
-            console.log(`Event with ID ${event.id} deleted successfully.`);
           } catch (error) {
             console.error(`Error deleting event with ID ${event.id}:`, error);
           }
         };
+
         const handleUpdate = async () => {
           try {
-            router.push(`/dashboard/${event.id}`)
+            router.push(`/dashboard/${event.id}`);
           } catch (error) {
-            console.error(`Error deleting event with ID ${event.id}:`, error);
+            console.error(`Error updating event with ID ${event.id}:`, error);
+          }
+        };
+
+        const handleMarkComplete = async () => {
+          try {
+            const result = await axios.put(`/api/status?id=${event.id}`, { status: true });
+            if (result.status === 200) {
+              toast.success("Event marked as complete");
+              setProposals((prev) =>
+                prev.map((proposal) =>
+                  proposal.id === event.id ? { ...proposal, status: true } : proposal
+                )
+              );
+            } else {
+              toast.error("Failed to mark event as complete");
+            }
+          } catch (error) {
+            console.error(`Error marking event with ID ${event.id} as complete:`, error);
+          }
+        };
+
+        const handleMarkIncomplete = async () => {
+          try {
+            const result = await axios.put(`/api/status?id=${event.id}`, { status: false });
+            if (result.status === 200) {
+              toast.success("Event marked as incomplete");
+              setProposals((prev) =>
+                prev.map((proposal) =>
+                  proposal.id === event.id ? { ...proposal, status: false } : proposal
+                )
+              );
+            } else {
+              toast.error("Failed to mark event as incomplete");
+            }
+          } catch (error) {
+            console.error(`Error marking event with ID ${event.id} as incomplete:`, error);
           }
         };
 
@@ -181,11 +202,13 @@ export default function EventTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem>View details</DropdownMenuItem> */}
-              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleDelete}>Delete event</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleUpdate}>Update Event</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleMarkComplete}>Mark as Complete</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleMarkIncomplete}>Mark as Incomplete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -218,17 +241,13 @@ export default function EventTable() {
         <Input
           placeholder="Filter mailIds..."
           value={(table.getColumn("mailId")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("mailId")?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => table.getColumn("mailId")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <Input
           placeholder="Filter convenorName..."
           value={(table.getColumn("convenorName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("convenorName")?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => table.getColumn("convenorName")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>
@@ -241,18 +260,16 @@ export default function EventTable() {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -261,28 +278,20 @@ export default function EventTable() {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
