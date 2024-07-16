@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import emailsender from '@/emails';
 import prisma from '@/database';
-import { addDays, isSameDay, parseISO } from 'date-fns';
+import { addDays, parseISO } from 'date-fns';
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -30,10 +30,11 @@ export async function GET(req: NextRequest) {
         for (const proposal of allProposals) {
             if (proposal.startDate && proposal.endDate && proposal.mailId) {
                 const startDate = parseISO(proposal.startDate.replace(/"/g, ''));
+                const endDate = parseISO(proposal.endDate.replace(/"/g, ''));
                 const sevenDaysFromNow = addDays(currentDate, 7);
                 const isWithinSevenDays = startDate <= sevenDaysFromNow && startDate >= currentDate;
 
-                if (isWithinSevenDays) {
+                if (proposal.status === false && isWithinSevenDays) {
                     const emailBody = `
                         Dear ${proposal.convenorName},
 
@@ -63,6 +64,40 @@ export async function GET(req: NextRequest) {
                             sentEmails.push(proposal.mailId);
                         } else {
                             console.log(`Failed to send reminder email to ${proposal.mailId} for event "${proposal.eventTitle}"`);
+                        }
+                    } catch (error) {
+                        console.error(`Error sending email to ${proposal.mailId}:`, error);
+                    }
+                } else if (proposal.status === false && currentDate > endDate) {
+                    const emailBody = `
+                        Dear ${proposal.convenorName},
+
+                        The event "${proposal.eventTitle}" has ended on ${proposal.endDate.replace(/"/g, '')}, but the status is still marked as incomplete.
+                        Please submit the necessary bills and contact the HOD office to close the event.
+
+                        Event Details:
+                        - Event Title: ${proposal.eventTitle}
+                        - Category: ${proposal.category}
+                        - Convenor Name: ${proposal.convenorName}
+                        - Convenor Designation: ${proposal.convenorDesignation}
+                        - Email: ${proposal.mailId}
+                        - Mobile Number: ${proposal.mobileNumber}
+                        - Proposed Period: ${proposal.proposedPeriod}
+                        - Duration: ${proposal.duration} days
+                        - Financial Support (Others): ${proposal.financialSupportOthers}
+                        - Financial Support (SRMIST): ${proposal.financialSupportSRMIST}
+                        - Estimated Budget: ${proposal.estimatedBudget}
+                        - Start Date: ${proposal.startDate.replace(/"/g, '')}
+                        - End Date: ${proposal.endDate.replace(/"/g, '')}
+                    `;
+
+                    try {
+                        const result = await emailsender({ subject: "Incomplete event notification", text: emailBody, receiverEmail: proposal.mailId });
+                        if (result.status == 200) {
+                            console.log(`Incomplete event email sent to ${proposal.mailId} for event "${proposal.eventTitle}"`);
+                            sentEmails.push(proposal.mailId);
+                        } else {
+                            console.log(`Failed to send incomplete event email to ${proposal.mailId} for event "${proposal.eventTitle}"`);
                         }
                     } catch (error) {
                         console.error(`Error sending email to ${proposal.mailId}:`, error);

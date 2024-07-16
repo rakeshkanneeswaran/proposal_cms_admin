@@ -124,7 +124,8 @@ export default function EventTable() {
       header: "Status",
       cell: ({ row }) => {
         const status = row.getValue("status") ? 'Completed' : 'In Progress';
-        return <div className="text-right font-medium text-black">{status}</div>;
+        const statusColor = row.getValue("status") ? 'text-green-500' : 'text-red-500';
+        return <div className={`text-right font-medium ${statusColor}`}>{status}</div>;
       },
     },
     {
