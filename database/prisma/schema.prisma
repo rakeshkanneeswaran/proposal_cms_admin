@@ -33,5 +33,6 @@ model Proposal {
   estimatedBudget        String?
   startDate              String?
   endDate                String?
+  status                 Boolean?
   createdAt              DateTime @default(now())
 }

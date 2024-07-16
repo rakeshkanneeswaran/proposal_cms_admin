@@ -131,7 +131,8 @@ export async function POST(req: NextRequest) {
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
                         startDate : body.fromDate,
-                        endDate : body.toDate
+                        endDate : body.toDate,
+                        status : false
                     }
                 })
 
@@ -230,7 +231,8 @@ export async function PUT(request: NextRequest) {
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
                         startDate : body.fromDate,
-                        endDate : body.toDate
+                        endDate : body.toDate,
+                  
                     }
                 })
                 console.log(result)
