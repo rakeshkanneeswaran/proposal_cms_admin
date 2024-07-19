@@ -103,8 +103,8 @@ export default function EventTable() {
       header: "Status",
       cell: ({ row }) => {
         const status = row.getValue("status") ? 'Completed' : 'In Progress';
-        const statusColor = row.getValue("status") ? 'text-green-500' : 'text-red-500';
-        return <div className={`text-right font-medium ${statusColor}`}>{status}</div>;
+        const statusColor = row.getValue("status") ? 'text-green-500  ' : 'text-red-500 animate-blink ';
+        return <div className={`text-right  ${statusColor} `}>{status}</div>;
       },
     },
     {
@@ -290,7 +290,7 @@ export default function EventTable() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex-1 text-sm text-muted-foreground ">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
