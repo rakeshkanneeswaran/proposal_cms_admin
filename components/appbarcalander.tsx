@@ -28,7 +28,6 @@ export const Appbarcalander = () => {
           <img src="/ctechlogo.jpeg" className="h-8 rounded-sm" alt="CTech Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">SRM Event Connect</span>
         </a>
-        <span className="hidden md:inline self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
           
           <button

@@ -25,7 +25,6 @@ export const Appbarupdatepage = ({ onClick, children }: any) => {
           <img src="/ctechlogo.jpeg" className="h-8 rounded-sm" alt="Flowbite Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">SRM Event Connect</span>
         </a>
-        <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex-row md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <div className='pl-3'>
             <button

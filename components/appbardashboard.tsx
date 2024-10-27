@@ -75,7 +75,6 @@ export const Appbardashboard = ({ onClick, children }: any) => {
           <img src="/ctechlogo.jpeg" className="h-8 rounded-sm" alt="CTech Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">SRM Event Connect</span>
         </a>
-        <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">Efficient. Streamlined. Intuitive.</span>
         <div className="flex space-x-4">
           <div className="relative" ref={dropdownRef}>
             <button
@@ -139,6 +138,7 @@ export const Appbardashboard = ({ onClick, children }: any) => {
           >
             {isSendingAlerts ? 'Processing...' : 'Send Alerts'}
           </button>
+          
           <div className="relative" ref={settingsDropdownRef}>
             <button
               type="button"
