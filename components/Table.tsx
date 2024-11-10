@@ -5,15 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import {
-  PDFDownloadLink,
-  Document,
-  Page,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import Image from "next/image";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -21,9 +13,7 @@ import {
 } from "@radix-ui/react-icons";
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -32,15 +22,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+} from "./ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -48,7 +38,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "./ui/table";
 
 export type Event = {
   id: string;
@@ -57,93 +47,6 @@ export type Event = {
   convenorName: string;
   status: boolean;
 };
-
-const styles = StyleSheet.create({
-  page: { padding: 20 },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  logo: { width: 50, height: 50, marginRight: 10 },
-  title: { flex: 1, fontSize: 18, fontWeight: "bold", textAlign: "center" ,marginRight: '4px'},
-  memoRow: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 4,
-  },
-  sectionTitle: { fontSize: 14, marginVertical: 6, fontWeight: "bold" },
-  sectionContent: { marginBottom: 6, fontSize: 12, textAlign: "justify" },
-  footer: { position: "absolute", bottom: 20, left: 20, right: 20 },
-  signature: { fontSize: 12, marginTop: 20 },
-});
-
-const Report = ({ event }: { event: Event }) => (
-  <Document>
-    <Page style={styles.page}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <Image
-          src="https://upload.wikimedia.org/wikipedia/en/f/fe/Srmseal.png"
-          style={styles.logo}
-        />
-        <Text style={styles.title}>Event Report</Text>
-      </View>
-
-      <View style={styles.memoRow}>
-        <Text>To: Head of Department</Text>
-        <Text>Date: {new Date().toLocaleDateString()}</Text>
-      </View>
-      <View style={styles.memoRow}>
-        <Text>From: {event.convenorName}</Text>
-        <Text>Subject: {event.eventTitle}</Text>
-      </View>
-
-      {/* Introduction Section */}
-      <Text style={styles.sectionTitle}>Introduction</Text>
-      <Text style={styles.sectionContent}>
-        This report provides an overview of the event titled &quot;{event.eventTitle}&quot;.
-        The event was organized by {event.convenorName} and involved various participants.
-        This report aims to summarize the key activities and outcomes of the event.
-      </Text>
-
-      {/* Discussion Section */}
-      <Text style={styles.sectionTitle}>Discussion</Text>
-      <Text style={styles.sectionContent}>
-        The event was designed to achieve the following goals:
-      </Text>
-      <Text style={styles.sectionContent}>1. Engage with attendees to share insights.</Text>
-      <Text style={styles.sectionContent}>
-        2. Facilitate networking among participants.
-      </Text>
-      <Text style={styles.sectionContent}>
-        3. Showcase the latest advancements and developments.
-      </Text>
-
-      <Text style={styles.sectionContent}>
-        The participation level was {event.status ? "successful and completed" : "still in progress"}. The event attracted several participants and enabled collaborative discussions.
-      </Text>
-
-      {/* Conclusion Section */}
-      <Text style={styles.sectionTitle}>Conclusion</Text>
-      <Text style={styles.sectionContent}>
-        In summary, the event &quot;{event.eventTitle}&quot; was a significant opportunity for
-        knowledge sharing and networking. We hope this event will foster future
-        collaborations among the participants.
-      </Text>
-
-      {/* Footer Section */}
-      <View style={styles.footer}>
-        <Text style={styles.signature}>Convenor&apos;s Signature: ____________________</Text>
-        <Text style={styles.signature}>
-          Head of Department&apos;s Signature: ____________________
-        </Text>
-      </View>
-    </Page>
-  </Document>
-);
 
 export default function EventTable() {
   const router = useRouter();
@@ -301,12 +204,9 @@ export default function EventTable() {
   return (
     <div className="w-full bg-white rounded-md shadow-lg p-3 border-4 border-black">
       {selectedEvent && (
-        <PDFDownloadLink
-          document={<Report event={selectedEvent} />}
-          fileName={`${selectedEvent.eventTitle}_Report.pdf`}
-        >
-          <Button variant="outline">Download Report</Button>
-        </PDFDownloadLink>
+        <Button variant="outline" onClick={() => console.log("Generate report for", selectedEvent)}>
+          Download Report (Placeholder)
+        </Button>
       )}
       <Table>
         <TableHeader>

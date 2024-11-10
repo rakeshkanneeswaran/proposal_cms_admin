@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
+import Image from 'next/image';
 
 interface Session {
   status: 'authenticated' | 'unauthenticated' | 'loading';
@@ -15,14 +16,14 @@ export const Appbarupdatepage = ({ onClick, children }: any) => {
     if (session.status === "unauthenticated") {
       router.push("/signin");
     } 
-  }, [session.status, router, session, session]);
+  }, [session.status, router, session]);
 
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="https://www.srmist.edu.in/department/department-of-computing-technologies/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="/ctechlogo.jpeg" className="h-8 rounded-sm" alt="Flowbite Logo" />
+          <Image src="/ctechlogo.jpeg" className="h-8 rounded-sm" alt="Flowbite Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">SRM Event Connect</span>
         </a>
         <div className="flex-row md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">

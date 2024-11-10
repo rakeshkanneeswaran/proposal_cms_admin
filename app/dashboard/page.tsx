@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from 'react-toastify';
 import { Appbardashboard } from "@/components/appbardashboard";
-import EventTable from "@/components/Table";
+import EventTable from "../../components/Table";
 import axios from "axios";
 
 const confirmationSubject = "Confirmation for your proposal submitted at ctech";

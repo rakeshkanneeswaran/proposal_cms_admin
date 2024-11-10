@@ -34,27 +34,27 @@ export default function Page({ params }: {
     const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
     const [estimatedBudget, setEstimatedBudget] = useState('');
     const router = useRouter()
-    async function getEventData() {
-        const result = await axios.get(`/api/proposal?id=${params.eventid}`);
-        console.log(result.data);
-        const proposal = result.data.proposal;
-        setEventTitle(proposal.eventTitle);
-        console.log(proposal.eventTitle);
-        setCategory(proposal.category);
-        setFromDate(proposal.fromDate);
-        setToDate(proposal.toDate);
-        setConvenorName(proposal.convenorName);
-        setConvenorDesignation(proposal.convenorDesignation);
-        setMailId(proposal.mailId);
-        setMobileNumber(proposal.mobileNumber);
-        setDuration(proposal.duration);
-        setFinancialSupportOthers(proposal.financialSupportOthers);
-        setFinancialSupportSRMIST(proposal.financialSupportSRMIST);
-        setEstimatedBudget(proposal.estimatedBudget);
-    }
     useEffect(() => {
+        async function getEventData() {
+            const result = await axios.get(`/api/proposal?id=${params.eventid}`);
+            console.log(result.data);
+            const proposal = result.data.proposal;
+            setEventTitle(proposal.eventTitle);
+            console.log(proposal.eventTitle);
+            setCategory(proposal.category);
+            setFromDate(proposal.fromDate);
+            setToDate(proposal.toDate);
+            setConvenorName(proposal.convenorName);
+            setConvenorDesignation(proposal.convenorDesignation);
+            setMailId(proposal.mailId);
+            setMobileNumber(proposal.mobileNumber);
+            setDuration(proposal.duration);
+            setFinancialSupportOthers(proposal.financialSupportOthers);
+            setFinancialSupportSRMIST(proposal.financialSupportSRMIST);
+            setEstimatedBudget(proposal.estimatedBudget);
+        }
         getEventData();
-    }, []);
+    }, [params.eventid]);
 
     useEffect(() => {
         console.log(eventTitle);
