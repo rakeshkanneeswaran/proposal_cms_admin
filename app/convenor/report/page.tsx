@@ -1,6 +1,7 @@
 "use client";
 import { useState,ChangeEvent } from "react";
 import useGeneratePDF from "../report/useGeneratePDF";
+import { Appbardashboardconvenor } from "@/components/ui/appdashboardconvenor";
 
 export default function ReportPage() {
     const generatePDF = useGeneratePDF();
@@ -20,6 +21,7 @@ export default function ReportPage() {
         registeredTeams: "",
         participatedTeams: "",
         internalParticipation: "",
+        externalParticipation: "",
         targetedAudience: "",
         technicalSessions: "",
         chiefGuestName: "",
@@ -53,6 +55,7 @@ export default function ReportPage() {
 
     return (
         <div className="bg-gradient-to-r from-purple-50 to-blue-300 min-h-screen">
+            <Appbardashboardconvenor></Appbardashboardconvenor>
             <div className="flex md:flex-row flex-col justify-between px-5 py-36">
                 <div className="w-full md:w-1/2 flex justify-center items-start">
                     <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md border-blue-500 border-4">
@@ -119,6 +122,10 @@ export default function ReportPage() {
                                 <div className="flex flex-col space-y-1.5">
                                     <label className="font-medium">Number of Internal Participants</label>
                                     <input type="number" name="internalParticipation" className="border p-2 rounded" value={formData.internalParticipation} onChange={handleChange} />
+                                </div>
+                                <div className="flex flex-col space-y-1.5">
+                                    <label className="font-medium">Number of External Participants</label>
+                                    <input type="number" name="externalParticipation" className="border p-2 rounded" value={formData.externalParticipation} onChange={handleChange} />
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <label className="font-medium">Targeted Audience</label>

@@ -17,6 +17,7 @@ interface FormData {
     registeredTeams: string;
     participatedTeams: string;
     internalParticipation: string;
+    externalParticipation: string;
     targetedAudience: string;
     technicalSessions: string;
     chiefGuestName: string;
@@ -36,11 +37,11 @@ const useGeneratePDF = () => {
             const pdfDoc = await PDFDocument.create();
             const now = new Date();
             const createdAt = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-            
+
             const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
             let page = pdfDoc.addPage();
             const { width, height } = page.getSize();
-            
+
             const bannerImageBytes = await fetch("/banner.png").then((res) => res.arrayBuffer());
             const bannerImage = await pdfDoc.embedPng(bannerImageBytes);
             const bannerWidth = width * 0.5;
@@ -111,25 +112,26 @@ const useGeneratePDF = () => {
 
             const fields = [
                 `1. Event Convener: ${formData.convenorName}, ${formData.convenorDepartment}`,
-            `2. Association Convener: ${formData.associateConvenorName}, ${formData.associateConvenorDepartment}`,
-            `3. Organizing Team: ${formData.organizingTeamName}, ${formData.organizingTeamDepartment}`,
-            `4. Conducting Department: ${formData.conductingDepartment}`,
-            `5. Date: ${formData.date}`,
-            `6. Duration: ${formData.duration}`,
-            `7. Type of Event: ${formData.typeOfEvent}`,
-            `8. Mode of Conduct: ${formData.modeOfConduct}`,
-            `9. Number of Registered Teams: ${formData.registeredTeams}`,
-            `10. Number of Registered Participants: ${formData.participatedTeams}`,
-            `11. Number of Internal Participants: ${formData.internalParticipation}`,
-            `12. Targeted Audience: ${formData.targetedAudience}`,
-            `13. Number of Technical Sessions: ${formData.technicalSessions}`,
-            `14. Chief Guest: ${formData.chiefGuestName}`,
-            `15. Alumni (Yes/No): ${formData.chiefGuestAlumni}`,
-            `16. Designation: ${formData.chiefGuestDesignation}`,
-            `17. Online Profile Link: ${formData.chiefGuestOnlineProfileLink}`,
-            `18. Financial Support (Other): ${formData.financeSupportOther}`,
-            `19. Financial Support (SRMIST): ${formData.financeSupportSRMIST}`,
-            `20. Estimated Budget: ${formData.estimatedBudget}`
+                `2. Association Convener: ${formData.associateConvenorName}, ${formData.associateConvenorDepartment}`,
+                `3. Organizing Team: ${formData.organizingTeamName}, ${formData.organizingTeamDepartment}`,
+                `4. Conducting Department: ${formData.conductingDepartment}`,
+                `5. Date: ${formData.date}`,
+                `6. Duration: ${formData.duration}`,
+                `7. Type of Event: ${formData.typeOfEvent}`,
+                `8. Mode of Conduct: ${formData.modeOfConduct}`,
+                `9. Number of Registered Teams: ${formData.registeredTeams}`,
+                `10. Number of Registered Participants: ${formData.participatedTeams}`,
+                `11. Number of Internal Participants: ${formData.internalParticipation}`,
+                `12. Number of External Participants: ${formData.externalParticipation}`,
+                `13. Targeted Audience: ${formData.targetedAudience}`,
+                `14. Number of Technical Sessions: ${formData.technicalSessions}`,
+                `15. Chief Guest: ${formData.chiefGuestName}`,
+                `16. Alumni (Yes/No): ${formData.chiefGuestAlumni}`,
+                `17. Designation: ${formData.chiefGuestDesignation}`,
+                `18. Online Profile Link: ${formData.chiefGuestOnlineProfileLink}`,
+                `19. Financial Support (Other): ${formData.financeSupportOther}`,
+                `20. Financial Support (SRMIST): ${formData.financeSupportSRMIST}`,
+                `21. Estimated Budget: ${formData.estimatedBudget}`
             ];
 
             fields.forEach((field) => {
