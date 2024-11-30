@@ -4,6 +4,9 @@ interface Session {
   status: "authenticated" | "unauthenticated" | "loading";
 }
 
+
+
+
 export const Appbardashboardconvenor = ({ onClick, children }: any) => {
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-green-600 to-blue-600 fixed w-full z-20 top-0 border-b border-gray-200">
