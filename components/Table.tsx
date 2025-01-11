@@ -180,9 +180,7 @@ export default function EventTable() {
                 Mark as Incomplete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setSelectedEvent(event)}>
-                Generate Report
-              </DropdownMenuItem>
+            
             </DropdownMenuContent>
           </DropdownMenu>
         );

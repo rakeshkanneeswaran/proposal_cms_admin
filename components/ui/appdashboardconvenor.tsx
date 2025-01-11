@@ -19,11 +19,13 @@ export const Appbardashboardconvenor = ({ onClick, children }: any) => {
             src="/banner.png"
             className="h-8 rounded-sm"
             alt="CTech Logo"
+            width={80} height={10} 
           />
           <img
             src="/ctechlogo.jpeg"
             className="h-8 rounded-sm"
             alt="CTech Logo"
+            width={80} height={10} 
           />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
             SRM Event Connect
