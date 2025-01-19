@@ -1,6 +1,6 @@
 import prisma from "@/database";
 import CredentialsProvider from "next-auth/providers/credentials"
-import emailsender from "@/emails";
+import { EmailService } from "@/services";
 
 
 export const authOptions = {
@@ -22,15 +22,13 @@ export const authOptions = {
                     });
 
                     if (existingUser) {
-                        console.log(existingUser)
-                        console.log("secret")
-                        emailsender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: "Sign-in Detected on Ctechevent Connect", text: "If you haven't signed in, please contact the administrators immediately." });
+                        await EmailService.emailSender({ receiverEmail: "rakikanneeswaran@gmail.com", subject: "Sign-in Detected on Ctechevent Connect", text: "If you haven't signed in, please contact the administrators immediately." });
                         return {
                             id: existingUser.username,
                             name: existingUser.username,
                         };
-                    } 
-                    
+                    }
+
                     else {
                         return null; // Return null if user not found or credentials are invalid
                     }

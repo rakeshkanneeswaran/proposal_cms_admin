@@ -1,13 +1,10 @@
 // EventForm.tsx
-"use client"
+"use client";
 import * as React from "react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import emailsender from "@/emails";
-const confirmationSubject = "Confirmation for your proposal submitted at ctech";
-
 import {
   Card,
   CardContent,
@@ -47,19 +44,19 @@ export default function EventForm() {
   const router = useRouter();
 
   // State management as in the initial form
-  const [eventTitle, setEventTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [fromData, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [convenorName, setConvenorName] = useState('');
-  const [convenorDesignation, setConvenorDesignation] = useState('');
-  const [mailId, setMailId] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [proposedPeriod, setProposedPeriod] = useState('');
-  const [duration, setDuration] = useState('');
+  const [eventTitle, setEventTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [fromData, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [convenorName, setConvenorName] = useState("");
+  const [convenorDesignation, setConvenorDesignation] = useState("");
+  const [mailId, setMailId] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [proposedPeriod, setProposedPeriod] = useState("");
+  const [duration, setDuration] = useState("");
   const [financialSupportOthers, setFinancialSupportOthers] = useState("");
-  const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState('');
-  const [estimatedBudget, setEstimatedBudget] = useState('');
+  const [financialSupportSRMIST, setFinancialSupportSRMIST] = useState("");
+  const [estimatedBudget, setEstimatedBudget] = useState("");
   const confirmationBody = `
         This is to confirm that your proposal has been approved with the following details:
         - Event Title: ${eventTitle}
@@ -84,7 +81,7 @@ export default function EventForm() {
     }
 
     try {
-      const result = await axios.post('/api/proposal', {
+      const result = await axios.post("/api/proposal", {
         eventTitle,
         category,
         convenorName,
@@ -96,38 +93,39 @@ export default function EventForm() {
         financialSupportOthers,
         financialSupportSRMIST,
         estimatedBudget,
-        username
+        username,
       });
 
       console.log("status code sent by server is " + result.status);
       if (result.status == 200 && result.data.email == true) {
-        alert("Event added successfully and email sent successfully to applicant with email " + mailId)
-
+        alert(
+          "Event added successfully and email sent successfully to applicant with email " +
+            mailId
+        );
+      } else if (result.status == 200 && result.data.email == false) {
+        alert("Event added successfully, but email not sent to applicant.");
       }
-      else if (result.status == 200 && result.data.email == false) {
-        alert("Event added successfully, but email not sent to applicant.")
-      }
-
-
 
       // Reset form fields after successful submission
-      setEventTitle('');
-      setCategory('');
-      setConvenorName('');
-      setConvenorDesignation('');
-      setMailId('');
-      setMobileNumber('');
-      setProposedPeriod('');
-      setDuration('');
-      setFinancialSupportOthers('');
-      setFinancialSupportSRMIST('');
-      setEstimatedBudget('');
+      setEventTitle("");
+      setCategory("");
+      setConvenorName("");
+      setConvenorDesignation("");
+      setMailId("");
+      setMobileNumber("");
+      setProposedPeriod("");
+      setDuration("");
+      setFinancialSupportOthers("");
+      setFinancialSupportSRMIST("");
+      setEstimatedBudget("");
     } catch (error: any) {
-      console.error("Error creating event:", error.response?.data || error.message);
+      console.error(
+        "Error creating event:",
+        error.response?.data || error.message
+      );
       alert("Failed to create event. Please try again later.");
     }
   };
-
 
   return (
     <div className="flex justify-center items-center min-h-screen p-4 ">
@@ -155,9 +153,7 @@ export default function EventForm() {
               {/* Category */}
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="event_category">Category</Label>
-                <Select
-                  onValueChange={(value) => setCategory(value)}
-                >
+                <Select onValueChange={(value) => setCategory(value)}>
                   <SelectTrigger id="framework">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
@@ -185,7 +181,9 @@ export default function EventForm() {
 
               {/* Convenor Designation */}
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="convenor_designation">Convenor Designation</Label>
+                <Label htmlFor="convenor_designation">
+                  Convenor Designation
+                </Label>
                 <Input
                   type="text"
                   id="convenor_designation"
@@ -260,7 +258,9 @@ export default function EventForm() {
 
               {/* Financial Support (Others) */}
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="financial_support_others">Financial Support (Others)</Label>
+                <Label htmlFor="financial_support_others">
+                  Financial Support (Others)
+                </Label>
                 <Input
                   type="number"
                   id="financial_support_others"
@@ -273,7 +273,9 @@ export default function EventForm() {
 
               {/* Financial Support (SRMIST) */}
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="financial_support_srmist">Financial Support (SRMIST)</Label>
+                <Label htmlFor="financial_support_srmist">
+                  Financial Support (SRMIST)
+                </Label>
                 <Input
                   type="number"
                   id="financial_support_srmist"
@@ -297,7 +299,9 @@ export default function EventForm() {
                 />
               </div>
             </div>
-            <Button type="submit" className="mt-4">Submit</Button>
+            <Button type="submit" className="mt-4">
+              Submit
+            </Button>
           </form>
         </CardContent>
       </Card>
