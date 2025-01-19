@@ -4,6 +4,12 @@ import useGeneratePDF from "../report/useGeneratePDF";
 import { Appbardashboardconvenor } from "@/components/ui/appdashboardconvenor";
 export default function ReportPage() {
   const generatePDF = useGeneratePDF();
+  const handleChangeEventType = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
   const [formData, setFormData] = useState({
     eventName: "",
     convenorName: "",
@@ -176,13 +182,21 @@ export default function ReportPage() {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <label className="font-medium">Type of Event</label>
-                  <input
-                    type="text"
+                  <select
                     name="typeOfEvent"
                     className="border p-2 rounded"
                     value={formData.typeOfEvent}
-                    onChange={handleChange}
-                  />
+                    onChange={handleChangeEventType}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select an Event Type
+                    </option>
+                    <option value="Hackathon">Hackathon</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Event">Event</option>
+                    <option value="Ideathon">Ideathon</option>
+                  </select>
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <label className="font-medium">Mode of Conduct</label>
