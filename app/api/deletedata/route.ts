@@ -14,11 +14,11 @@ export async function DELETE() {
             if (existingUser) {
                 const result = await prisma.proposal.deleteMany()
                 console.log(result)
-                return NextResponse.json({ messgae: "Delete all event successfully" } , {status : 200})
+                return NextResponse.json({ message: "Delete all event successfully" }, { status: 200 })
             }
         } catch (error) {
             console.log(error)
-            return NextResponse.json({ messgae: "not able to delete the event" } , {status : 500})
+            return NextResponse.json({ message: "not able to delete the event" }, { status: 500 })
         }
     }
 }

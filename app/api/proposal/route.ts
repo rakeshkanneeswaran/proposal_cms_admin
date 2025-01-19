@@ -1,56 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/database';
 import { getServerSession } from "next-auth"
-import { confirmationBody } from '@/lib/emailtemplates';
-
-import emailsender from '@/emails';
-
-
-// GET All Proposals
-// Endpoint URL: /api/proposal
-// Method: GET
-// Description: Fetches all proposals if the authenticated user is authorized as an admin.
-// Response: Returns a JSON object containing all proposals or an error message if not authorized.
-
-
-// export async function GET() {
-//     const session = await getServerSession();
-//     if (session?.user?.name) {
-//         console.log(session?.user?.name)
-//         try {
-//             const existingUser = await prisma.admin.findFirst({
-//                 where: {
-//                     username: session?.user?.name
-//                 }
-//             });
-//             if (existingUser) {
-//                 const allproposal = await prisma.proposal.findMany()
-//                 console.log("printing all proposals")
-//                 console.log(allproposal)
-//                 return NextResponse.json({ proposal: allproposal })
-
-//             }
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-//     else {
-//         return NextResponse.json({ proposal: "something went wrong while fetching" })
-//     }
-//     console.log(session?.user?.name)
-//     return NextResponse.json({ proposal: "something went wrong while fetching" })
-// }
-
-
-//--------------------------------------------------------------------------------------------------------------------------------
-
-// GET All Proposals or Proposal by ID
-// Endpoint URL: /api/proposal or /api/proposal?id={proposalId}
-// Method: GET
-// Description: Fetches all proposals or a specific proposal by ID if the authenticated user is authorized as an admin.
-// Query Parameter: id (optional) - ID of the proposal to retrieve
-// Response: Returns a JSON object containing all proposals or a specific proposal data, or an error message if not authorized or proposal not found.
-
 export async function GET(request: NextRequest) {
     const session = await getServerSession();
     if (session?.user?.name) {
@@ -89,12 +39,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ "message": "Unauthorized" });
 }
 
-
-
-
-
-
-
 //--------------------------------------------------------------------------------------------------------------------------------
 
 // ADD Proposal
@@ -103,7 +47,6 @@ export async function GET(request: NextRequest) {
 // Description: Adds a new proposal if the authenticated user matches the request body's username.
 // Request Body: JSON object containing proposal details.
 // Response: Returns a success message if the proposal is added successfully or a validation error.
-
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -117,7 +60,16 @@ export async function POST(req: NextRequest) {
                 }
             });
             if (existingUser) {
-                const eventadded = await prisma.proposal.create({
+                const eventExists = await prisma.proposal.findFirst({
+                    where: {
+                        mailId: body.mailId,
+                        eventTitle: body.eventTitle
+                    }
+                })
+                if (eventExists) {
+                    return NextResponse.json({ message: "Event already exists" }, { status: 203 })
+                }
+                await prisma.proposal.create({
                     data: {
                         category: body.category,
                         eventTitle: body.eventTitle,
@@ -130,25 +82,19 @@ export async function POST(req: NextRequest) {
                         financialSupportOthers: body.financialSupportOthers,
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
-                        startDate : body.fromDate,
-                        endDate : body.toDate,
-                        status : false
+                        startDate: body.fromDate,
+                        endDate: body.toDate,
+                        status: false
                     }
                 })
-
-                
-                console.log("added data as follows")
-                console.log(eventadded)
-                return NextResponse.json({ messgae: "processing the request" }, { status: 200 })
-
-
+                return NextResponse.json({ message: "processing the request" }, { status: 200 })
             }
         } catch (error) {
             return NextResponse.json({ message: "Event could not be added , please error while acessing database " }, { status: 400 })
-          
+
         }
     }
-    return NextResponse.json({ messgae: "Validation error" })
+    return NextResponse.json({ message: "Validation error" })
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +113,7 @@ export async function DELETE(request: NextRequest) {
             const searchParams = request.nextUrl.searchParams;
             const id = searchParams.get('id');
             if (id == null) {
-                return NextResponse.json({ "messgae": "could not find the proposal" })
+                return NextResponse.json({ "message": "could not find the proposal" })
             }
             const existingUser = await prisma.admin.findFirst({
                 where: {
@@ -179,11 +125,11 @@ export async function DELETE(request: NextRequest) {
                     where: { id: parseInt(id) }
                 })
                 console.log(result)
-                return NextResponse.json({ messgae: "Delete event successfully" } , {status : 200})
+                return NextResponse.json({ message: "Delete event successfully" }, { status: 200 })
             }
         } catch (error) {
             console.log(error)
-            return NextResponse.json({ messgae: "not able to delete the event" } , {status : 500})
+            return NextResponse.json({ message: "not able to delete the event" }, { status: 500 })
         }
     }
 }
@@ -206,7 +152,7 @@ export async function PUT(request: NextRequest) {
             const searchParams = request.nextUrl.searchParams;
             const id = searchParams.get('id');
             if (id == null) {
-                return NextResponse.json({ "messgae": "could not find the proposal" })
+                return NextResponse.json({ "message": "could not find the proposal" })
             }
             const existingUser = await prisma.admin.findFirst({
                 where: {
@@ -230,23 +176,20 @@ export async function PUT(request: NextRequest) {
                         financialSupportOthers: body.financialSupportOthers,
                         financialSupportSRMIST: body.financialSupportSRMIST,
                         estimatedBudget: body.estimatedBudget,
-                        startDate : body.fromDate,
-                        endDate : body.toDate,
-                  
+                        startDate: body.fromDate,
+                        endDate: body.toDate,
+
                     }
                 })
                 console.log(result)
-                return NextResponse.json({ messgae: "Update event successfully" },{status : 200})
+                return NextResponse.json({ message: "Update event successfully" }, { status: 200 })
             }
         } catch (error) {
             console.log(error)
-            return NextResponse.json({ messgae: "Your are not authentication" })
+            return NextResponse.json({ message: "Your are not authentication" })
 
         }
     }
 
-    else {
-
-    }
 }
 

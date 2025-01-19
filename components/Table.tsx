@@ -23,7 +23,6 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   DropdownMenu,
   DropdownMenuTrigger,

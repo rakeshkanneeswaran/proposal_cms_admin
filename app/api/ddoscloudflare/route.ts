@@ -22,6 +22,6 @@ export async function POST(req: NextRequest) {
             console.log(error)
         }
     }
-    return NextResponse.json({ messgae: "Something went worng" })
+    return NextResponse.json({ message: "Something went worng" })
 }
 

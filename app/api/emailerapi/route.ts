@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import emailsender from '@/emails';
+import { EmailService } from '@/services';
 import prisma from '@/database';
 import { addDays, parseISO } from 'date-fns';
 
@@ -7,9 +7,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     try {
-        const value = await emailsender({ subject: body.subject, text: body.text, receiverEmail: body.receiverEmail });
-        console.log("Sending email to the receiver: " + body.receiverEmail);
-        console.log("The value of info returned is " + JSON.stringify(value));
+        const value = await EmailService.emailSender({ subject: body.subject, text: body.text, receiverEmail: body.receiverEmail });
+        // console.log("Sending email to the receiver: " + body.receiverEmail);
+        // console.log("The value of info returned is " + JSON.stringify(value));
 
         return NextResponse.json({ message: "Confirmation email sent to the applicant", info: JSON.stringify(value) }, { status: 200 });
 
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
                     `;
 
                     try {
-                        const result = await emailsender({ subject: "Reminder for your upcoming event", text: emailBody, receiverEmail: proposal.mailId });
+                        const result = await EmailService.emailSender({ subject: "Reminder for your upcoming event", text: emailBody, receiverEmail: proposal.mailId });
                         if (result.status == 200) {
                             console.log(`Reminder email sent to ${proposal.mailId} for event "${proposal.eventTitle}"`);
                             sentEmails.push(proposal.mailId);
@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
                     `;
 
                     try {
-                        const result = await emailsender({ subject: "Incomplete event notification", text: emailBody, receiverEmail: proposal.mailId });
+                        const result = await EmailService.emailSender({ subject: "Incomplete event notification", text: emailBody, receiverEmail: proposal.mailId });
                         if (result.status == 200) {
                             console.log(`Incomplete event email sent to ${proposal.mailId} for event "${proposal.eventTitle}"`);
                             sentEmails.push(proposal.mailId);
@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
                 }
             }
         }
-        console.log("Sent emails: " + sentEmails);
+        // console.log("Sent emails: " + sentEmails);
         return NextResponse.json({ message: "Emails sent successfully", sentEmails }, { status: 200 });
 
     } catch (error) {

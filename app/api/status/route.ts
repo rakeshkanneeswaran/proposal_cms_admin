@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/database';
 import { getServerSession } from "next-auth"
 
-
-
 export async function PUT(request: NextRequest) {
-
     const body = await request.json();
     const session = await getServerSession();
     if (session?.user?.name) {
@@ -13,7 +10,7 @@ export async function PUT(request: NextRequest) {
             const searchParams = request.nextUrl.searchParams;
             const id = searchParams.get('id');
             if (id == null) {
-                return NextResponse.json({ "messgae": "could not find the proposal" })
+                return NextResponse.json({ "message": "could not find the proposal" })
             }
             const existingUser = await prisma.admin.findFirst({
                 where: {
@@ -26,23 +23,15 @@ export async function PUT(request: NextRequest) {
                         id: parseInt(id)
                     },
                     data: {
-                        
-                        status : body.status
-                  
+                        status: body.status
                     }
                 })
                 console.log(result)
-                return NextResponse.json({ messgae: "Update event successfully" },{status : 200})
+                return NextResponse.json({ message: "Update event successfully" }, { status: 200 })
             }
         } catch (error) {
             console.log(error)
-            return NextResponse.json({ messgae: "Your are not authentication" })
-
+            return NextResponse.json({ message: "Your are not authentication" })
         }
     }
-
-    else {
-
-    }
 }
-

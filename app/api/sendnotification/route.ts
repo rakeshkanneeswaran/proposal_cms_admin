@@ -1,19 +1,8 @@
-import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from 'next/server';
-import emailSender from '@/emails';
 import prisma from '@/database';
 import { addDays, isSameDay, parseISO } from 'date-fns';
-
-const transporter = nodemailer.createTransport({
-    port: 465,
-    host: "smtp.gmail.com",
-    auth: {
-        user: process.env.NDOEMAILER_USERNAME,
-        pass: process.env.NDOEMAILER_PASSWORD
-    },
-    secure: true,
-    tls: { rejectUnauthorized: false }
-});
+import { EmailService } from "@/services";
+import { getProposals } from './action';
 
 // Next.js API route handler
 export async function GET(request: NextRequest, res: NextResponse) {
@@ -21,9 +10,9 @@ export async function GET(request: NextRequest, res: NextResponse) {
     const currentDate = new Date();
 
     // Fetch all proposals from the database
-    const allProposals = await prisma.proposal.findMany();
-    console.log("Printing all proposals");
-    console.log(allProposals);
+    const allProposals = await getProposals();
+    // console.log("Printing all proposals");
+    // console.log(allProposals);
 
     // Prepare email configuration
     const emailConfig = {
@@ -72,7 +61,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
 
                 // Send the email
                 try {
-                    const result = await emailSender({
+                    const result = await EmailService.emailSender({
                         receiverEmail: proposal.mailId,
                         subject: emailConfig.subject,
                         text: emailBody,
@@ -91,7 +80,6 @@ export async function GET(request: NextRequest, res: NextResponse) {
             }
         }
     }
-
-    return NextResponse.json({ message: "notifications send to applicant" } , {status : 200});
+    return NextResponse.json({ message: "notifications send to applicant" }, { status: 200 });
 }
 

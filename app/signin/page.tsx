@@ -5,14 +5,31 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { Appbar } from "@/components/appbar";
-const techparkimage = "./tech_park.jpeg";
+import { requestCredentials } from "./action";
 
 export default function LoginForm() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); // New state for loading
+  const [forgotLoading, setForgotLoading] = useState(false);
   const session = useSession();
+
+  const onForgotPassword = async () => {
+    setForgotLoading(true); // Disable the button
+    try {
+      const result = await requestCredentials();
+      if (result) {
+        toast.success("Credentials sent to your email");
+      } else {
+        toast.error("Unable to send credentials");
+      }
+    } catch (error) {
+      toast.error("Some server error occurred while sending credentials.");
+    } finally {
+      setForgotLoading(false); // Re-enable the button
+    }
+  };
 
   // Redirect user based on session status
   useEffect(() => {
@@ -126,6 +143,16 @@ export default function LoginForm() {
             </div>
 
             <button
+              onClick={onForgotPassword}
+              className={`transition-all w-full px-5 py-2 text-lg text-black  rounded-lg hover:bg-indigo-600 focus:outline-none ${
+                forgotLoading ? "cursor-not-allowed opacity-50" : ""
+              }`}
+              disabled={forgotLoading}
+            >
+              {forgotLoading ? "Sending Credentials..." : "Forgot Credentials?"}
+            </button>
+
+            <button
               type="button"
               className="bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
               onClick={handleLogin}
@@ -170,52 +197,55 @@ export default function LoginForm() {
 
       {/* Content Section */}
       <div className="bg-gray-900 text-white p-6 rounded-lg">
-  {/* Title Section */}
-  <div className="text-center mb-6">
-    <p className="text-2xl font-bold">Under the Guidance of</p>
-  </div>
+        {/* Title Section */}
+        <div className="text-center mb-6">
+          <p className="text-2xl font-bold">Under the Guidance of</p>
+        </div>
 
-  {/* Content Section */}
-  <div className="flex justify-between">
-    {/* Name 1 */}
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. Pushpalatha M</p>
-      <p className="text-lg text-gray-300">Professor & Associate Chairperson</p>
-      <p className="text-lg text-gray-300">School of Computing</p>
-    </div>
+        {/* Content Section */}
+        <div className="flex justify-between">
+          {/* Name 1 */}
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. Pushpalatha M</p>
+            <p className="text-lg text-gray-300">
+              Professor & Associate Chairperson
+            </p>
+            <p className="text-lg text-gray-300">School of Computing</p>
+          </div>
 
-    {/* Name 2 */}
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. Niranjana G</p>
-      <p className="text-lg text-gray-300">Professor and Head</p>
-      <p className="text-lg text-gray-300">Department of Computing Technologies</p>
-    </div>
+          {/* Name 2 */}
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. Niranjana G</p>
+            <p className="text-lg text-gray-300">Professor and Head</p>
+            <p className="text-lg text-gray-300">
+              Department of Computing Technologies
+            </p>
+          </div>
 
-    {/* Name 3 */}
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. Thamizhamuthu</p>
-      <p className="text-lg text-gray-300">Assistant Professor</p>
-    </div>
+          {/* Name 3 */}
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. Thamizhamuthu</p>
+            <p className="text-lg text-gray-300">Assistant Professor</p>
+          </div>
 
-    {/* Name 4 */}
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. N.A.S Vinod</p>
-      <p className="text-lg text-gray-300">Assistant Professor</p>
-    </div>
+          {/* Name 4 */}
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. N.A.S Vinod</p>
+            <p className="text-lg text-gray-300">Assistant Professor</p>
+          </div>
 
-    {/* Name 5 */}
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. G. Usha</p>
-      <p className="text-lg text-gray-300">Professor</p>
-    </div>
+          {/* Name 5 */}
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. G. Usha</p>
+            <p className="text-lg text-gray-300">Professor</p>
+          </div>
 
-    <div className="text-center">
-      <p className="font-medium text-xl">Dr. A. Anbasari</p>
-      <p className="text-lg text-gray-300">Assistant Professor</p>
-    </div>
-  </div>
-</div>
-
+          <div className="text-center">
+            <p className="font-medium text-xl">Dr. A. Anbasari</p>
+            <p className="text-lg text-gray-300">Assistant Professor</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

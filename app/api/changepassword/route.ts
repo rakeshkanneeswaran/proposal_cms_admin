@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const session = await getServerSession();
   if (!session?.user?.name) {
-    return NextResponse.json({ messgae: "Your are not authentication" }, { status: 401 })
+    return NextResponse.json({ message: "Your are not authentication" }, { status: 401 })
   }
   const body = await req.json();
   console.log(body.username, body.password);
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const password = body.password;
 
   if (!username || !password) {
-    return NextResponse.json({ messgae: "Username and password are required.", status: 400 })
+    return NextResponse.json({ message: "Username and password are required.", status: 400 })
 
   }
   try {
