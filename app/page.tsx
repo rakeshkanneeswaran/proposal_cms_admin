@@ -1,17 +1,14 @@
 import { getServerSession } from "next-auth";
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 export default async function Page() {
-
-  console.log("page ran")
+  console.log("page ran");
   const session = await getServerSession();
   if (session?.user) {
-    console.log("redirected to dashboard")
-    redirect('/dashboard')
-
+    console.log("redirected to dashboard");
+    redirect("/dashboard");
   } else {
-    console.log("redirect to signin page")
-    redirect('/signin')
+    console.log("redirect to signin page");
+    redirect("/signin");
   }
-  
 }
