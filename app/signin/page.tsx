@@ -196,53 +196,86 @@ export default function LoginForm() {
       </section>
 
       {/* Content Section */}
+      {/* Updated Content Section */}
+      {/* Updated Content Section */}
       <div className="bg-gray-900 text-white p-6 rounded-lg">
-        {/* Title Section */}
-        <div className="text-center mb-6">
-          <p className="text-2xl font-bold">Under the Guidance of</p>
-        </div>
-
-        {/* Content Section */}
-        <div className="flex justify-between">
-          {/* Name 1 */}
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. Pushpalatha M</p>
-            <p className="text-lg text-gray-300">
-              Professor & Associate Chairperson
-            </p>
-            <p className="text-lg text-gray-300">School of Computing</p>
+        {/* Horizontal Layout */}
+        <div className="flex flex-col gap-6">
+          {/* Under the Guidance Of */}
+          <div className="text-center mb-6">
+            <p className="text-2xl font-bold">Guided By</p>
           </div>
 
-          {/* Name 2 */}
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. Niranjana G</p>
-            <p className="text-lg text-gray-300">Professor and Head</p>
-            <p className="text-lg text-gray-300">
-              Department of Computing Technologies
-            </p>
+          <div className="flex justify-center gap-10">
+            {/* Name 1 */}
+            <div className="text-center">
+              <p className="font-bold text-xl">Dr. Pushpalatha M</p>
+              <p className="text-lg text-gray-300">
+                Professor & Associate Chairperson
+              </p>
+              <p className="text-lg text-gray-300">School of Computing</p>
+            </div>
+
+            {/* Name 2 */}
+            <div className="text-center">
+              <p className="font-bold text-xl">Dr. Niranjana G</p>
+              <p className="text-lg text-gray-300">
+                Professor and Head of the Department
+              </p>
+              <p className="text-lg text-gray-300">
+                Department of Computing Technologies
+              </p>
+            </div>
           </div>
 
-          {/* Name 3 */}
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. Thamizhamuthu</p>
-            <p className="text-lg text-gray-300">Assistant Professor</p>
+          {/* Supported By */}
+          <div className="text-center mt-8 mb-4">
+            <p className="text-2xl font-bold">Supported By</p>
           </div>
 
-          {/* Name 4 */}
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. N.A.S Vinod</p>
-            <p className="text-lg text-gray-300">Assistant Professor</p>
+          <div className="flex justify-center gap-10">
+            {/* Name 3 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Dr. Thamizhamuthu</p>
+              <p className="text-md text-gray-300">Assistant Professor</p>
+            </div>
+
+            {/* Name 4 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Dr. N.A.S Vinoth</p>
+              <p className="text-md text-gray-300">Assistant Professor</p>
+            </div>
+
+            {/* Name 5 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Dr. G. Usha</p>
+              <p className="text-md text-gray-300">Professor</p>
+            </div>
+
+            {/* Name 6 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Dr. A. Anbasari</p>
+              <p className="text-md text-gray-300">Assistant Professor</p>
+            </div>
           </div>
 
-          {/* Name 5 */}
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. G. Usha</p>
-            <p className="text-lg text-gray-300">Professor</p>
+          {/* Guided By */}
+          <div className="text-center mt-8 mb-4">
+            <p className="text-2xl font-bold">Developed By</p>
           </div>
 
-          <div className="text-center">
-            <p className="font-medium text-xl">Dr. A. Anbasari</p>
-            <p className="text-lg text-gray-300">Assistant Professor</p>
+          <div className="flex justify-center gap-10">
+            {/* Developer 1 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Rakesh Maravar</p>
+              <p className="text-md text-gray-300">(RA2211003010573)</p>
+            </div>
+
+            {/* Developer 2 */}
+            <div className="text-center">
+              <p className="font-bold text-lg">Krish Makkijani</p>
+              <p className="text-md text-gray-300">(RA2211003010573)</p>
+            </div>
           </div>
         </div>
       </div>
