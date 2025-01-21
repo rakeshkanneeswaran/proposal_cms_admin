@@ -193,7 +193,7 @@ export default function Excelpage() {
             type="button"
             className="px-4 py-2 ml-4 text-white bg-green-600 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             onClick={() => {
-              window.location.href = "/prosoaltestfile.xlsx";
+              window.location.href = "/template.xlsx";
             }}
           >
             Download Template
