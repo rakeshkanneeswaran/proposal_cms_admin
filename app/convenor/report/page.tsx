@@ -36,6 +36,14 @@ export default function ReportPage() {
     financeSupportOther: "",
     financeSupportSRMIST: "",
     estimatedBudget: "",
+    maleParticipation: "",
+    femaleParticipation: "",
+    rsParticipation: "",
+    facultyParticipation: "",
+    industrypersonParticipation: "",
+    financeSupportRegistration: "",
+    reimAmount: "",
+    returnAmount: "",
   });
 
   const [descriptions, setDescriptions] = useState<string[]>([""]);
@@ -81,7 +89,9 @@ export default function ReportPage() {
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <label className="font-medium">Event Convener Name</label>
+                  <label className="font-medium">
+                    Event Convener Name and Designation
+                  </label>
                   <input
                     type="text"
                     name="convenorName"
@@ -257,6 +267,66 @@ export default function ReportPage() {
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Number of Male Participants
+                  </label>
+                  <input
+                    type="number"
+                    name="maleParticipation"
+                    className="border p-2 rounded"
+                    value={formData.maleParticipation}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Number of Female Participants
+                  </label>
+                  <input
+                    type="number"
+                    name="femaleParticipation"
+                    className="border p-2 rounded"
+                    value={formData.femaleParticipation}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Number of RS Participants
+                  </label>
+                  <input
+                    type="number"
+                    name="rsParticipation"
+                    className="border p-2 rounded"
+                    value={formData.rsParticipation}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Number of Faculty Participants
+                  </label>
+                  <input
+                    type="number"
+                    name="facultyParticipation"
+                    className="border p-2 rounded"
+                    value={formData.facultyParticipation}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Number of Industry-Person Participants
+                  </label>
+                  <input
+                    type="number"
+                    name="industrypersonParticipation"
+                    className="border p-2 rounded"
+                    value={formData.industrypersonParticipation}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
                   <label className="font-medium">Targeted Audience</label>
                   <input
                     type="text"
@@ -324,7 +394,8 @@ export default function ReportPage() {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <label className="font-medium">
-                    Financial Support (Other)
+                    Financial statement (External Sponsoring Agency details with
+                    amount:)
                   </label>
                   <input
                     type="text"
@@ -336,13 +407,49 @@ export default function ReportPage() {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <label className="font-medium">
-                    Financial Support (SRMIST)
+                    Financial statement (Contribution from University:)
                   </label>
                   <input
                     type="text"
                     name="financeSupportSRMIST"
                     className="border p-2 rounded"
                     value={formData.financeSupportSRMIST}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Financial statement (Income through Registration:)
+                  </label>
+                  <input
+                    type="text"
+                    name="financeSupportRegistration"
+                    className="border p-2 rounded"
+                    value={formData.financeSupportRegistration}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Amount to be reimbursed from the university:
+                  </label>
+                  <input
+                    type="text"
+                    name="reimAmount"
+                    className="border p-2 rounded"
+                    value={formData.reimAmount}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <label className="font-medium">
+                    Amount returned to University:
+                  </label>
+                  <input
+                    type="text"
+                    name="returnAmount"
+                    className="border p-2 rounded"
+                    value={formData.returnAmount}
                     onChange={handleChange}
                   />
                 </div>
