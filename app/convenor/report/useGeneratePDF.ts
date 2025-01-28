@@ -18,6 +18,11 @@ interface FormData {
     participatedTeams: string;
     internalParticipation: string;
     externalParticipation: string;
+    maleParticipation: string;
+    femaleParticipation: string;
+    rsParticipation: string;
+    facultyParticipation: string;
+    industrypersonParticipation: string;
     targetedAudience: string;
     technicalSessions: string;
     chiefGuestName: string;
@@ -26,7 +31,10 @@ interface FormData {
     chiefGuestOnlineProfileLink: string;
     financeSupportOther: string;
     financeSupportSRMIST: string;
+    financeSupportRegistration: string;
     estimatedBudget: string;
+    reimAmount: string;
+    returnAmount: string;
 }
 
 const useGeneratePDF = () => {
@@ -111,27 +119,36 @@ const useGeneratePDF = () => {
             yOffset -= 40;
 
             const fields = [
-                `1. Event Convener: ${formData.convenorName}, ${formData.convenorDepartment}`,
-                `2. Association Convener: ${formData.associateConvenorName}, ${formData.associateConvenorDepartment}`,
-                `3. Organizing Team: ${formData.organizingTeamName}, ${formData.organizingTeamDepartment}`,
-                `4. Conducting Department: ${formData.conductingDepartment}`,
-                `5. Date: ${formData.date}`,
-                `6. Duration: ${formData.duration}`,
-                `7. Type of Event: ${formData.typeOfEvent}`,
-                `8. Mode of Conduct: ${formData.modeOfConduct}`,
-                `9. Number of Registered Teams: ${formData.registeredTeams}`,
-                `10. Number of Registered Participants: ${formData.participatedTeams}`,
-                `11. Number of Internal Participants: ${formData.internalParticipation}`,
-                `12. Number of External Participants: ${formData.externalParticipation}`,
-                `13. Targeted Audience: ${formData.targetedAudience}`,
-                `14. Number of Technical Sessions: ${formData.technicalSessions}`,
-                `15. Chief Guest: ${formData.chiefGuestName}`,
-                `16. Alumni (Yes/No): ${formData.chiefGuestAlumni}`,
-                `17. Designation: ${formData.chiefGuestDesignation}`,
-                `18. Online Profile Link: ${formData.chiefGuestOnlineProfileLink}`,
-                `19. Financial Support (Other): ${formData.financeSupportOther}`,
-                `20. Financial Support (SRMIST): ${formData.financeSupportSRMIST}`,
-                `21. Estimated Budget: ${formData.estimatedBudget}`
+                `1. Event Name: ${formData.eventName}`,
+                `2. Event Convener: ${formData.convenorName}, ${formData.convenorDepartment}`,
+                `3. Association Convener: ${formData.associateConvenorName}, ${formData.associateConvenorDepartment}`,
+                `4. Organizing Team: ${formData.organizingTeamName}, ${formData.organizingTeamDepartment}`,
+                `5. Conducting Department: ${formData.conductingDepartment}`,
+                `6. Date: ${formData.date}`,
+                `7. Duration: ${formData.duration}`,
+                `8. Type of Event: ${formData.typeOfEvent}`,
+                `9. Mode of Conduct: ${formData.modeOfConduct}`,
+                `10. Number of Registered Teams: ${formData.registeredTeams}`,
+                `11. Number of Registered Participants: ${formData.participatedTeams}`,
+                `12. Number of Internal Participants: ${formData.internalParticipation}`,
+                `13. Number of External Participants: ${formData.externalParticipation}`,
+                `14. Number of Male Participants: ${formData.maleParticipation}`,
+                `15. Number of Female Participants: ${formData.femaleParticipation}`,
+                `16. Number of RS Participants: ${formData.rsParticipation}`,
+                `17. Number of Faculty Participants: ${formData.facultyParticipation}`,
+                `18. Number of Industry Person Participants: ${formData.industrypersonParticipation}`,
+                `19. Targeted Audience: ${formData.targetedAudience}`,
+                `20. Number of Technical Sessions: ${formData.technicalSessions}`,
+                `21. Chief Guest: ${formData.chiefGuestName}`,
+                `22. Alumni (Yes/No): ${formData.chiefGuestAlumni}`,
+                `23. Designation: ${formData.chiefGuestDesignation}`,
+                `24. Online Profile Link: ${formData.chiefGuestOnlineProfileLink}`,
+                `25. Financial Support (Other): ${formData.financeSupportOther}`,
+                `26. Financial Support (SRMIST): ${formData.financeSupportSRMIST}`,
+                `27. Financial Support (Registration): ${formData.financeSupportRegistration}`,
+                `28. Estimated Budget: ${formData.estimatedBudget}`,
+                `29. Reimbursement Amount: ${formData.reimAmount}`,
+                `30. Return Amount: ${formData.returnAmount}`
             ];
 
             fields.forEach((field) => {
