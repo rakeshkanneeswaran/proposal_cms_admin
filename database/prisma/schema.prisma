@@ -36,3 +36,58 @@ model Proposal {
   status                 Boolean?
   createdAt              DateTime @default(now())
 }
+
+model CallForProposal {
+  id                String   @id @default(uuid())
+  department        String
+  brandTitle        String
+  duration          String
+  eventDate         DateTime
+  convener          String
+  designation       String
+  totalExpenditure  Float
+  sponsorshipDetails String?
+  pastEventsDetails String?
+  otherDetails      String?
+  yourName          String
+  yourEmail         String
+  active            Boolean @default(false)
+
+  fundFromUniversity   Float
+  fundFromRegistration Float
+  fundFromSponsorship  Float
+  fundFromOtherSources Float
+
+  detailedBudgets DetailedBudget[]
+  sponsorships   Sponsorship[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DetailedBudget {
+  id                   String   @id @default(uuid())
+  sno                  Int
+  description          String
+  quantity             Int
+  costPerUnit          Float
+  totalAmount          Float
+
+  callForProposalId String
+  callForProposal   CallForProposal @relation(fields: [callForProposalId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sponsorship {
+  id                   String   @id @default(uuid())
+  sponsorshipDetails   String
+  associatingAgencies  String?
+
+  callForProposalId String
+  callForProposal   CallForProposal @relation(fields: [callForProposalId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
