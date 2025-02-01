@@ -100,6 +100,10 @@ export default function CreateProposal() {
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
+    //disable buttons
+    document.querySelectorAll("button").forEach(button => button.disabled = true);
+    document.querySelectorAll("button").forEach(button => button.classList.add("disabled"));
+
     e.preventDefault();
     try {
       await axios.post("/api/proposals", formData);
@@ -107,6 +111,10 @@ export default function CreateProposal() {
     } catch (error) {
       alert("Error submitting proposal");
     }
+
+    //enable buttons
+    document.querySelectorAll("button").forEach(button => button.disabled = false);
+    document.querySelectorAll("button").forEach(button => button.classList.remove("disabled"));
   };
 
   return (
@@ -117,22 +125,70 @@ export default function CreateProposal() {
 
           {/* Basic Details */}
           <div className="grid grid-cols-2 gap-4">
-            <input className="border p-2" name="department" placeholder="Organizing Department" onChange={handleChange} required />
-            <input className="border p-2" name="brandTitle" placeholder="Event Title" onChange={handleChange} required />
-            <input className="border p-2" name="duration" placeholder="Duration of Event" onChange={handleChange} required />
-            <input type="date" className="border p-2" name="eventDate" onChange={handleChange} required />
-            <input className="border p-2" name="convener" placeholder="Convener Name" onChange={handleChange} required />
-            <input className="border p-2" name="designation" placeholder="Designation" onChange={handleChange} required />
-            <input type="number" className="border p-2" name="totalExpenditure" placeholder="Total Estimated Budget (₹)" onChange={handleChange} required />
-            <input className="border p-2" name="sponsorshipDetails" placeholder="Sponsorship Details" onChange={handleChange} required />
-            <input className="border p-2" name="pastEventsDetails" placeholder="Past Events (2021-2024)" onChange={handleChange} required />
-            <input className="border p-2" name="otherDetails" placeholder="Any Other Relevant Details" onChange={handleChange} required />
-            <input className="border p-2" name="yourName" placeholder="Your Name" onChange={handleChange} required />
-            <input type="email" className="border p-2" name="yourEmail" placeholder="Your Email" onChange={handleChange} required />
-            <input type="number" className="border p-2" name="fundFromUniversity" placeholder="Fund from University (₹)" onChange={handleChange} required />
-            <input type="number" className="border p-2" name="fundFromRegistration" placeholder="Fund from Registration (₹)" onChange={handleChange} required />
-            <input type="number" className="border p-2" name="fundFromSponsorship" placeholder="Fund from Sponsorship (₹)" onChange={handleChange} required />
-            <input type="number" className="border p-2" name="fundFromOtherSources" placeholder="Fund from Other Sources (₹)" onChange={handleChange} required />
+            <label>
+              Organizing Department:
+              <input className="border p-2 mt-1" name="department" placeholder="Organizing Department" onChange={handleChange} required />
+            </label>
+            <label>
+              Event Title:
+              <input className="border p-2 mt-1" name="brandTitle" placeholder="Event Title" onChange={handleChange} required />
+            </label>
+            <label>
+              Duration of Event:
+              <input className="border p-2 mt-1" name="duration" placeholder="Duration of Event" onChange={handleChange} required />
+            </label>
+            <label>
+              Event Date:
+              <input type="date" className="border p-2 mt-1" name="eventDate" onChange={handleChange} required />
+            </label>
+            <label>
+              Convener Name:
+              <input className="border p-2 mt-1" name="convener" placeholder="Convener Name" onChange={handleChange} required />
+            </label>
+            <label>
+              Designation:
+              <input className="border p-2 mt-1" name="designation" placeholder="Designation" onChange={handleChange} required />
+            </label>
+            <label>
+              Total Estimated Budget (₹):
+              <input type="number" className="border p-2 mt-1" name="totalExpenditure" placeholder="Total Estimated Budget (₹)" onChange={handleChange} required />
+            </label>
+            <label>
+              Sponsorship Details:
+              <input className="border p-2 mt-1" name="sponsorshipDetails" placeholder="Sponsorship Details" onChange={handleChange} required />
+            </label>
+            <label>
+              Past Events (2021-2024):
+              <input className="border p-2 mt-1" name="pastEventsDetails" placeholder="Past Events (2021-2024)" onChange={handleChange} required />
+            </label>
+            <label>
+              Any Other Relevant Details:
+              <input className="border p-2 mt-1" name="otherDetails" placeholder="Any Other Relevant Details" onChange={handleChange} required />
+            </label>
+            <label>
+              Your Name:
+              <input className="border p-2 mt-1" name="yourName" placeholder="Your Name" onChange={handleChange} required />
+            </label>
+            <label>
+              Your Email:
+              <input type="email" className="border p-2 mt-1" name="yourEmail" placeholder="Your Email" onChange={handleChange} required />
+            </label>
+            <label>
+              Fund from University (₹):
+              <input type="number" className="border p-2 mt-1" name="fundFromUniversity" placeholder="Fund from University (₹)" onChange={handleChange} required />
+            </label>
+            <label>
+              Fund from Registration (₹):
+              <input type="number" className="border p-2 mt-1" name="fundFromRegistration" placeholder="Fund from Registration (₹)" onChange={handleChange} required />
+            </label>
+            <label>
+              Fund from Sponsorship (₹):
+              <input type="number" className="border p-2 mt-1" name="fundFromSponsorship" placeholder="Fund from Sponsorship (₹)" onChange={handleChange} required />
+            </label>
+            <label>
+              Fund from Other Sources (₹):
+              <input type="number" className="border p-2 mt-1" name="fundFromOtherSources" placeholder="Fund from Other Sources (₹)" onChange={handleChange} required />
+            </label>
           </div>
 
           {/* Budget Table */}
@@ -140,22 +196,22 @@ export default function CreateProposal() {
           <table className="w-full border mt-2">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border p-2">S.No</th>
-                <th className="border p-2">Description</th>
-                <th className="border p-2">Quantity</th>
-                <th className="border p-2">Cost/Unit (₹)</th>
-                <th className="border p-2">Total Amount (₹)</th>
+            <th className="border p-2">S.No</th>
+            <th className="border p-2">Description</th>
+            <th className="border p-2">Quantity</th>
+            <th className="border p-2">Cost/Unit (₹)</th>
+            <th className="border p-2">Total Amount (₹)</th>
               </tr>
             </thead>
             <tbody>
               {formData.detailedBudgets.map((row, index) => (
-                <tr key={index}>
-                  <td className="border p-2">{row.sno}</td>
-                  <td className="border p-2"><input type="text" name="description" className="w-full" onChange={(e) => handleBudgetChange(index, e)} required /></td>
-                  <td className="border p-2"><input type="number" name="quantity" className="w-full" onChange={(e) => handleBudgetChange(index, e)} required /></td>
-                  <td className="border p-2"><input type="number" name="costPerUnit" className="w-full" onChange={(e) => handleBudgetChange(index, e)} required /></td>
-                  <td className="border p-2"><input type="number" name="totalAmount" className="w-full" onChange={(e) => handleBudgetChange(index, e)} required /></td>
-                </tr>
+            <tr key={index}>
+              <td className="border p-2">{row.sno}</td>
+              <td className="border p-2"><input type="text" name="description" className="w-full mt-1" onChange={(e) => handleBudgetChange(index, e)} required /></td>
+              <td className="border p-2"><input type="number" name="quantity" className="w-full mt-1" onChange={(e) => handleBudgetChange(index, e)} required /></td>
+              <td className="border p-2"><input type="number" name="costPerUnit" className="w-full mt-1" onChange={(e) => handleBudgetChange(index, e)} required /></td>
+              <td className="border p-2"><input type="number" name="totalAmount" className="w-full mt-1" onChange={(e) => handleBudgetChange(index, e)} required /></td>
+            </tr>
               ))}
             </tbody>
           </table>
@@ -166,16 +222,16 @@ export default function CreateProposal() {
           <table className="w-full border mt-2">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border p-2">Sponsorship Details</th>
-                <th className="border p-2">Associating Agencies</th>
+            <th className="border p-2">Sponsorship Details</th>
+            <th className="border p-2">Associating Agencies</th>
               </tr>
             </thead>
             <tbody>
               {formData.sponsorships.map((row, index) => (
-                <tr key={index}>
-                  <td className="border p-2"><input type="text" name="sponsorshipDetails" className="w-full" onChange={(e) => handleSponsorshipChange(index, e)} required /></td>
-                  <td className="border p-2"><input type="text" name="associatingAgencies" className="w-full" onChange={(e) => handleSponsorshipChange(index, e)} required /></td>
-                </tr>
+            <tr key={index}>
+              <td className="border p-2"><input type="text" name="sponsorshipDetails" className="w-full mt-1" onChange={(e) => handleSponsorshipChange(index, e)} required /></td>
+              <td className="border p-2"><input type="text" name="associatingAgencies" className="w-full mt-1" onChange={(e) => handleSponsorshipChange(index, e)} required /></td>
+            </tr>
               ))}
             </tbody>
           </table>

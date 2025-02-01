@@ -52,6 +52,7 @@ model CallForProposal {
   yourName          String
   yourEmail         String
   active            Boolean @default(false)
+  rejected          Boolean @default(false)
 
   fundFromUniversity   Float
   fundFromRegistration Float

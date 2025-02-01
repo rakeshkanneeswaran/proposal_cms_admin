@@ -78,26 +78,94 @@ export async function GET(req: Request, res: NextApiResponse) {
 
     const session = await getServerSession();
     if (!session?.user?.name) {
-        //return res.status(401).json({ error: "You are not authenticated" });
         return NextResponse.json({ error: "You are not authenticated" });
     }
 
     try {
-        const proposal = await prisma.callForProposal.findUnique({
+        if (id) {
+            const proposal = await prisma.callForProposal.findUnique({
+                where: { id: id as string },
+                include: { detailedBudgets: true, sponsorships: true }
+            });
+
+            if (!proposal) {
+                return NextResponse.json({ error: "Proposal not found" });
+            }
+
+            return NextResponse.json(proposal);
+        } else {
+            const proposals = await prisma.callForProposal.findMany({
+                include: { detailedBudgets: true, sponsorships: true }
+            });
+
+            return NextResponse.json(proposals);
+        }
+    } catch (error) {
+        console.error("Error fetching proposal(s):", error);
+        return NextResponse.json({ error: "Failed to fetch proposal(s)" });
+    }
+}
+
+//put request to approve proposal and mail the user that the proposal has been approved. make sure a user is logged in
+export async function PUT(req: Request, res: NextApiResponse) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    const session = await getServerSession();
+    if (!session?.user?.name) {
+        return NextResponse.json({ error: "You are not authenticated" });
+    }
+
+    try {
+        const proposal = await prisma.callForProposal.update({
             where: { id: id as string },
+            data: { active: true, rejected: false },
             include: { detailedBudgets: true, sponsorships: true }
         });
 
-        if (!proposal) {
-            return res.status(404).json({ error: "Proposal not found" });
-        }
+        //send email to the user saying that the proposal has been approved
+        EmailService.emailSender({
+            receiverEmail: proposal.yourEmail,
+            subject: "Proposal Approved",
+            text: `Your proposal has been approved. Proposal ID: ${proposal.id}`
+        });
 
-        //res.status(200).json(proposal);
-        return NextResponse.json(proposal);
+        return NextResponse.json({ message: "Proposal approved successfully" });
     } catch (error) {
-        console.error("Error fetching proposal:", error);
-        //res.status(500).json({ error: "Failed to fetch proposal" });
-        return NextResponse.json({ error: "Failed to fetch proposal" });
+        console.error("Error approving proposal:", error);
+        return NextResponse.json({ error: "Failed to approve proposal" });
+    }
+}
+
+//delete request to reject a proposal and mail the user that the proposal has been rejected. include a reason for rejection get from url
+export async function DELETE(req: Request, res: NextApiResponse) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    const reason = searchParams.get('reason');
+
+    const session = await getServerSession();
+    if (!session?.user?.name) {
+        return NextResponse.json({ error: "You are not authenticated" });
+    }
+
+    try {
+        const proposal = await prisma.callForProposal.update({
+            where: { id: id as string },
+            data: { active: false, rejected: true },
+            include: { detailedBudgets: true, sponsorships: true }
+        });
+
+        //send email to the user saying that the proposal has been rejected
+        EmailService.emailSender({
+            receiverEmail: proposal.yourEmail,
+            subject: "Proposal Rejected",
+            text: `Your proposal has been rejected. Reason: ${reason}`
+        });
+
+        return NextResponse.json({ message: "Proposal rejected successfully" });
+    } catch (error) {
+        console.error("Error rejecting proposal:", error);
+        return NextResponse.json({ error: "Failed to reject proposal" });
     }
 }
 
