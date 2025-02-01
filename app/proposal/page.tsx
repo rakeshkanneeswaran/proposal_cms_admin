@@ -67,7 +67,6 @@ export default function ProposalsPage() {
     };
 
     const handleApprove = async (id: string, email: string) => {
-        //disable other buttons
         document.querySelectorAll("button").forEach(button => button.disabled = true);
         document.querySelectorAll("button").forEach(button => button.classList.add("disabled"));
 
