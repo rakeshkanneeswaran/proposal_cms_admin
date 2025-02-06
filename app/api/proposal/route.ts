@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
                         convenorName: body.convenorName,
                         convenorDesignation: body.convenorDesignation,
                         mailId: body.mailId,
-                        mobileNumber: body.mobileNumber,
+                        mobileNumber: body.mobileNumber as string,
                         proposedPeriod: body.proposedPeriod,
                         duration: body.duration,
                         financialSupportOthers: body.financialSupportOthers,

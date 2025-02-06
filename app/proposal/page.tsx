@@ -112,7 +112,7 @@ export default function ProposalsPage() {
     return (
         <>
 
-            <div className="flex justify-end p-3">
+            <div className="flex justify-between p-3">
                 <button
                     type="button"
                     className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
@@ -122,6 +122,35 @@ export default function ProposalsPage() {
                 >
                     Back to dashboard
                 </button>
+                <button
+                    type="button"
+                    className="text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center ms-2"
+                    onClick={async () => {
+                        try {
+                            const response = await fetch('/api/proposals/export');
+
+                            if (!response.ok) {
+                                throw new Error('Failed to generate file');
+                            }
+
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'proposals.csv';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(url);
+                        } catch (error) {
+                            console.error('Error exporting CSV:', error);
+                            alert('Error exporting CSV. Please try again.');
+                        }
+                    }}
+                >
+                    Export
+                </button>
+
             </div>
 
             <div className="p-3">
