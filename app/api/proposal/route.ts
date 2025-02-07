@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
                         convenorName: body.convenorName,
                         convenorDesignation: body.convenorDesignation,
                         mailId: body.mailId,
-                        mobileNumber: body.mobileNumber as string,
+                        mobileNumber: JSON.stringify(body.mobileNumber),
                         proposedPeriod: body.proposedPeriod,
                         duration: body.duration,
                         financialSupportOthers: body.financialSupportOthers,
@@ -88,8 +88,10 @@ export async function POST(req: NextRequest) {
                     }
                 })
                 return NextResponse.json({ message: "processing the request" }, { status: 200 })
+
             }
         } catch (error) {
+            console.error("this is the error", error)
             return NextResponse.json({ message: "Event could not be added , please error while acessing database " }, { status: 400 })
 
         }
