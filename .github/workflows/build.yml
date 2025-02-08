@@ -1,3 +1,5 @@
+name: CI Build
+
 on:
   push:
     branches:
@@ -11,13 +13,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: setup node js environment
+      - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "14"
+          node-version: "20" # Upgraded from 14 to 20
+          cache: "npm" # Caches dependencies for faster builds
+
+      - name: Clean NPM Cache
+        run: npm cache clean --force
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps # Prevents dependency conflicts
 
       - name: Build the Next.js App
         run: npm run build
