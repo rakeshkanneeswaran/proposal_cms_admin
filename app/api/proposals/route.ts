@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { EmailService } from "@/services";
@@ -6,7 +5,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request, res: NextApiResponse) {
+export async function POST(req: Request, res: Response) {
 
     try {
         const body = await req.json();
@@ -72,7 +71,7 @@ export async function POST(req: Request, res: NextApiResponse) {
     }
 }
 
-export async function GET(req: Request, res: NextApiResponse) {
+export async function GET(req: Request, res: Response) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
@@ -107,7 +106,7 @@ export async function GET(req: Request, res: NextApiResponse) {
 }
 
 //put request to approve proposal and mail the user that the proposal has been approved. make sure a user is logged in
-export async function PUT(req: Request, res: NextApiResponse) {
+export async function PUT(req: Request, res: Response) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
@@ -138,7 +137,7 @@ export async function PUT(req: Request, res: NextApiResponse) {
 }
 
 //delete request to reject a proposal and mail the user that the proposal has been rejected. include a reason for rejection get from url
-export async function DELETE(req: Request, res: NextApiResponse) {
+export async function DELETE(req: Request, res: Response) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
     const reason = searchParams.get('reason');

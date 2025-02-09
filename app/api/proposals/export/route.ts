@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { parse } from "json2csv";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET() {
     try {
         const proposals = await prisma.callForProposal.findMany({
             where: {
@@ -16,7 +15,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         });
 
         if (!proposals.length) {
-            return res.status(404).json({ error: "No proposals found" });
+            return NextResponse.json({ error: "No proposals found" }, { status: 404 });
         }
 
         // Flatten and format data for CSV
@@ -53,6 +52,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         });
     } catch (error) {
         console.error("Error exporting proposals:", error);
-        res.status(500).json({ error: "Failed to export proposals" });
+        return NextResponse.json({ error: "Failed to export proposals" }, { status: 500 });
     }
 }
