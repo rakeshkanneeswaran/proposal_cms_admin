@@ -43,14 +43,14 @@ model CallForProposal {
   brandTitle        String
   duration          String
   eventDate         DateTime
-  convener          String
+  category          String
   designation       String
   totalExpenditure  Float
   sponsorshipDetails String?
   pastEventsDetails String?
   otherDetails      String?
-  yourName          String
-  yourEmail         String
+  convenerName          String
+  convenerEmail         String
   active            Boolean @default(false)
   rejected          Boolean @default(false)
 

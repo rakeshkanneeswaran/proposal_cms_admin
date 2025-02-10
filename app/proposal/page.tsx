@@ -23,14 +23,14 @@ interface Proposal {
     brandTitle: string;
     duration: string;
     eventDate: string;
-    convener: string;
+    category: string;
     designation: string;
     totalExpenditure: number;
     sponsorshipDetails: string;
     pastEventsDetails: string;
     otherDetails: string;
-    yourName: string;
-    yourEmail: string;
+    convenerName: string;
+    convenerEmail: string;
     fundFromUniversity: number;
     fundFromRegistration: number;
     fundFromSponsorship: number;
@@ -107,6 +107,29 @@ export default function ProposalsPage() {
         document.querySelectorAll("button").forEach(button => button.classList.remove("disabled"));
     };
 
+    const handleReturn = async (id: string, email: string) => {
+
+        //disable other buttons
+        document.querySelectorAll("button").forEach(button => button.disabled = true);
+        document.querySelectorAll("button").forEach(button => button.classList.add("disabled"));
+
+        const reason = prompt("Enter a message:");
+        if (!reason) return;
+
+        try {
+            await axios.delete(`/api/proposals?id=${id}&reason=${reason}&type=return`);
+            alert("Proposal returned!");
+            setModalOpen(false);
+            setProposals(proposals.map((p) => (p.id === id ? { ...p, active: false, rejected: true } : p)));
+        } catch (error) {
+            console.error("Error rejecting proposal:", error);
+        }
+
+        //enable other buttons
+        document.querySelectorAll("button").forEach(button => button.disabled = false);
+        document.querySelectorAll("button").forEach(button => button.classList.remove("disabled"));
+    };
+
     const router = useRouter();
 
     return (
@@ -171,8 +194,10 @@ export default function ProposalsPage() {
                             {proposals.map((proposal) => (
                                 <tr key={proposal.id} className="text-center">
                                     <td className="border p-2">{proposal.brandTitle}</td>
-                                    <td className="border p-2">{proposal.convener}</td>
-                                    <td className="border p-2">{!proposal.active && !proposal.rejected ? "Pending" : proposal.active ? "Approved" : "Rejected"}</td>
+                                    <td className="border p-2">{proposal.convenerName}</td>
+                                    <td className="border p-2">
+                                        {!proposal.active && !proposal.rejected ? "Pending" : proposal.active && proposal.rejected ? "Returned" : proposal.active ? "Approved" : "Rejected"}
+                                    </td>
                                     <td className="border p-2">
                                         <button className="bg-blue-500 text-white px-4 py-1 rounded" onClick={() => handleView(proposal)}>
                                             View
@@ -192,7 +217,7 @@ export default function ProposalsPage() {
                             <p><strong>Event Title:</strong> {selectedProposal.brandTitle}</p>
                             <p><strong>Duration:</strong> {selectedProposal.duration}</p>
                             <p><strong>Event Date:</strong> {new Date(selectedProposal.eventDate).toLocaleDateString()}</p>
-                            <p><strong>Convener:</strong> {selectedProposal.convener} ({selectedProposal.designation})</p>
+                            <p><strong>Convener:</strong> {selectedProposal.convenerName} ({selectedProposal.designation})</p>
                             <p><strong>Total Expenditure:</strong> ₹{selectedProposal.totalExpenditure}</p>
                             <p><strong>Sponsorship Details:</strong> {selectedProposal.sponsorshipDetails}</p>
                             <p><strong>Past Events:</strong> {selectedProposal.pastEventsDetails}</p>
@@ -241,14 +266,14 @@ export default function ProposalsPage() {
                             </table>
 
                             <div className="mt-4 flex justify-between">
-                                <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={() => handleApprove(selectedProposal.id, selectedProposal.yourEmail)}>
+                                <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={() => handleApprove(selectedProposal.id, selectedProposal.convenerEmail)}>
                                     Approve
                                 </button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleReject(selectedProposal.id, selectedProposal.yourEmail)}>
+                                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleReject(selectedProposal.id, selectedProposal.convenerEmail)}>
                                     Reject
                                 </button>
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalOpen(false)}>
-                                    Close
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => handleReturn(selectedProposal.id, selectedProposal.convenerEmail)}>
+                                    Return
                                 </button>
                             </div>
                         </div>
