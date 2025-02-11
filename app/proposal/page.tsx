@@ -130,6 +130,38 @@ export default function ProposalsPage() {
         document.querySelectorAll("button").forEach(button => button.classList.remove("disabled"));
     };
 
+    const handleExport = async (id: string) => {
+
+        //disable other buttons
+        document.querySelectorAll("button").forEach(button => button.disabled = true);
+        document.querySelectorAll("button").forEach(button => button.classList.add("disabled"));
+
+        try {
+            const response = await axios.get(`/api/proposals/export?id=${id}`, { responseType: 'blob' });
+
+            if (!response.data) {
+                throw new Error('Failed to generate file');
+            }
+
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `proposal_${id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            setModalOpen(false);
+            setProposals(proposals.map((p) => (p.id === id ? { ...p, active: false, rejected: true } : p)));
+        } catch (error) {
+            console.error("Error exporting proposal:", error);
+        }
+
+        //enable other buttons
+        document.querySelectorAll("button").forEach(button => button.disabled = false);
+        document.querySelectorAll("button").forEach(button => button.classList.remove("disabled"));
+    };
+
     const router = useRouter();
 
     return (
@@ -274,6 +306,9 @@ export default function ProposalsPage() {
                                 </button>
                                 <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => handleReturn(selectedProposal.id, selectedProposal.convenerEmail)}>
                                     Return
+                                </button>
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => handleExport(selectedProposal.id)}>
+                                    Export
                                 </button>
                             </div>
                         </div>
