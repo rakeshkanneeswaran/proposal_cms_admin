@@ -51,6 +51,10 @@ export default function ProposalsPage() {
         async function fetchProposals() {
             try {
                 const response = await axios.get("/api/proposals");
+                if (response.data?.error == 'You are not authenticated'){
+                    window.location.href = '/';
+                    return;
+                }
                 setProposals(response.data);
             } catch (error) {
                 console.error("Error fetching proposals:", error);

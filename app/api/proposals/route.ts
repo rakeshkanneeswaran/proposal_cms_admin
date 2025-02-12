@@ -149,6 +149,11 @@ export async function GET(req: Request, res: Response) {
 
             return NextResponse.json(proposal);
         } else {
+            const session = await getServerSession();
+            if (!session?.user?.name) {
+                return NextResponse.json({ error: "You are not authenticated" });
+            }
+            
             const proposals = await prisma.callForProposal.findMany({
                 include: { detailedBudgets: true, sponsorships: true }
             });
