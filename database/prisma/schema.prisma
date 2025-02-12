@@ -38,21 +38,21 @@ model Proposal {
 }
 
 model CallForProposal {
-  id                String   @id @default(uuid())
-  department        String
-  brandTitle        String
-  duration          String
-  eventDate         DateTime
-  category          String
-  designation       String
-  totalExpenditure  Float
+  id                 String   @id @default(uuid())
+  department         String
+  brandTitle         String
+  duration           String
+  eventDate          DateTime
+  category           String?
+  designation        String
+  totalExpenditure   Float
   sponsorshipDetails String?
-  pastEventsDetails String?
-  otherDetails      String?
-  convenerName          String
-  convenerEmail         String
-  active            Boolean @default(false)
-  rejected          Boolean @default(false)
+  pastEventsDetails  String?
+  otherDetails       String?
+  convenerName       String
+  convenerEmail      String
+  active             Boolean  @default(false)
+  rejected           Boolean  @default(false)
 
   fundFromUniversity   Float
   fundFromRegistration Float
@@ -60,19 +60,19 @@ model CallForProposal {
   fundFromOtherSources Float
 
   detailedBudgets DetailedBudget[]
-  sponsorships   Sponsorship[]
+  sponsorships    Sponsorship[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model DetailedBudget {
-  id                   String   @id @default(uuid())
-  sno                  Int
-  description          String
-  quantity             Int
-  costPerUnit          Float
-  totalAmount          Float
+  id          String @id @default(uuid())
+  sno         Int
+  description String
+  quantity    Int
+  costPerUnit Float
+  totalAmount Float
 
   callForProposalId String
   callForProposal   CallForProposal @relation(fields: [callForProposalId], references: [id], onDelete: Cascade)
@@ -82,9 +82,9 @@ model DetailedBudget {
 }
 
 model Sponsorship {
-  id                   String   @id @default(uuid())
-  sponsorshipDetails   String
-  associatingAgencies  String?
+  id                  String  @id @default(uuid())
+  sponsorshipDetails  String
+  associatingAgencies String?
 
   callForProposalId String
   callForProposal   CallForProposal @relation(fields: [callForProposalId], references: [id], onDelete: Cascade)
